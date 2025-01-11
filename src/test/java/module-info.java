@@ -5,4 +5,9 @@
 
 module TwseStockSoftwareTest {
     requires com.hunterhope.twsestocksoftware;
+    requires javafx.controls;
+    requires org.junit.jupiter.api;
+    requires org.testfx.junit5;
+    
+    exports com.hunterhope.twsestocksoftware.componet.test;
 }
