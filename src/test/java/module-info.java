@@ -8,6 +8,6 @@ module TwseStockSoftwareTest {
     requires javafx.controls;
     requires org.junit.jupiter.api;
     requires org.testfx.junit5;
-    
+    requires org.mockito;
     exports com.hunterhope.twsestocksoftware.componet.test;
 }

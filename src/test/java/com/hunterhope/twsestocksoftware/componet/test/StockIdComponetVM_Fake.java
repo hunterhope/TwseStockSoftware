@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.hunterhope.twsestocksoftware.componet;
+package com.hunterhope.twsestocksoftware.componet.test;
 
-import com.hunterhope.twsestocksoftware.componet.StockIdComponet.StockIdComponetVM;
+import com.hunterhope.twsestocksoftware.componet.StockIdComponet;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -14,7 +14,7 @@ import javafx.collections.ObservableList;
  *
  * @author user
  */
-public class StockIdComponetVM_impl implements StockIdComponetVM {
+public class StockIdComponetVM_Fake implements StockIdComponet.StockIdComponetVM{
 
     private ObjectProperty<ObservableList<String>> suggestions;
 
@@ -44,5 +44,5 @@ public class StockIdComponetVM_impl implements StockIdComponetVM {
         }
         return suggestions;
     }
-
+    
 }
