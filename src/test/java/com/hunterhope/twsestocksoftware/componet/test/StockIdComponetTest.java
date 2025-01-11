@@ -46,7 +46,7 @@ public class StockIdComponetTest {
     }
     
     @Test
-    public void componet_has_search_btn(FxRobot robot){
+    public void componet_has_suggestion_item_2020中鋼(FxRobot robot){
         //測試物件
         ComboBox cb = robot.lookup(".combo-box").query();
         //使用者互動行為
@@ -57,4 +57,5 @@ public class StockIdComponetTest {
         //驗證下拉選單中會有'2002 中鋼'的其中一個選項
         Assertions.assertTrue(cb.getItems().contains("2002 中鋼"),"應該包含選項 '2002 中鋼'");
     }
+    
 }

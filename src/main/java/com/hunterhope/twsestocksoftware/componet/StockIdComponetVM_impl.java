@@ -38,7 +38,7 @@ public class StockIdComponetVM_impl implements StockIdComponetVM {
     @Override
     public ObjectProperty<ObservableList<String>> suggestionsProperty() {
         if (suggestions == null) {
-            suggestions = new SimpleObjectProperty<>();
+            suggestions = new SimpleObjectProperty<>();//這個物件裡沒有任何可被觀察的List
         }
         return suggestions;
     }
