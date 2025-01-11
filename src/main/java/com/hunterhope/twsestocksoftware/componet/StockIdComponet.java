@@ -78,7 +78,7 @@ public class StockIdComponet extends HBox {
             @Override
             public void changed(ObservableValue<? extends String> ov, String os, String ns) {
                 //假如輸入的字串不是空字串在發出查詢
-                if (!ns.isBlank()) {
+                if (stockIdComb.getSelectionModel().isEmpty()&&!ns.isBlank()) {
                     vm.querySuggestions(ns);
                 }
             }
