@@ -20,9 +20,9 @@ public class StockIdComponetVM_impl implements StockIdComponetVM {
 
     @Override
     public void querySuggestions(String inputWord) {
-        if(suggestions.getValue()==null){
-            suggestions.setValue(FXCollections.observableArrayList());
-        }
+//        if(suggestions.getValue()==null){
+//            suggestions.setValue(FXCollections.observableArrayList());
+//        }
         switch (inputWord) {
             case "2":
                 suggestions.getValue().clear();
@@ -38,7 +38,7 @@ public class StockIdComponetVM_impl implements StockIdComponetVM {
     @Override
     public ObjectProperty<ObservableList<String>> suggestionsProperty() {
         if (suggestions == null) {
-            suggestions = new SimpleObjectProperty<>();//這個物件裡沒有任何可被觀察的List
+            suggestions = new SimpleObjectProperty<>(FXCollections.observableArrayList());//這個物件裡沒有任何可被觀察的List
         }
         return suggestions;
     }

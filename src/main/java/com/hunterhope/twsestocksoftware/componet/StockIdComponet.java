@@ -20,7 +20,7 @@ import javafx.scene.layout.Region;
  *
  * @author user
  */
-public class StockIdComponet extends HBox {
+public class StockIdComponet extends HBox{
 
     public interface StockIdComponetVM{
 
@@ -37,10 +37,11 @@ public class StockIdComponet extends HBox {
     public StockIdComponet() {
         //布局
         myLayout();
-        //事件處裡
-        hendleEvent();
         //資料綁定
         bindData();
+        //事件處裡(事件處理要在資料綁定後面,不然若事件處理是利用監聽器,會造成綁定到錯誤的屬性上)
+        hendleEvent();
+        
     }
 
     private void myLayout() {
@@ -79,11 +80,14 @@ public class StockIdComponet extends HBox {
                 stockIdComb.hide();
                 stockIdComb.show();
             }
-        });        
+        });
     }
 
     private void bindData() {
         //將ViewModel的建議選項屬性綁定給stockIdComb的Items屬性
+        if(vm.suggestionsProperty().getValue()==null){
+            throw new RuntimeException("要綁定的資料是空的會造成監聽器失效");
+        }
         stockIdComb.itemsProperty().bind(vm.suggestionsProperty());
     }
 
