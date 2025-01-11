@@ -53,7 +53,7 @@ public class StockIdComponetTest {
         //1.點擊ComboBox使他成為焦點
         robot.clickOn(cb, MouseButton.PRIMARY);
         //2.按下鍵盤數字鍵
-        robot.type(KeyCode.DIGIT2,1);
+        robot.type(KeyCode.NUMPAD2,1);
         //驗證下拉選單中會有'2002 中鋼'的其中一個選項
         Assertions.assertTrue(cb.getItems().contains("2002 中鋼"),"應該包含選項 '2002 中鋼'");
     }
