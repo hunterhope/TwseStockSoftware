@@ -5,21 +5,26 @@
 package com.hunterhope.twsestocksoftware.componet.test;
 
 import com.hunterhope.twsestocksoftware.componet.StockIdComponet;
+import java.util.List;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 
 /**
  *
  * @author user
  */
-public class StockIdComponetVM_Fake implements StockIdComponet.StockIdComponetVM{
+public class StockIdComponetVM_Fake implements StockIdComponet.StockIdComponetVM {
 
     private ObjectProperty<ObservableList<String>> suggestions;
+    private StringProperty errorMsg;
 
     @Override
-    public void querySuggestions(String inputWord) {
+    public Task<List<String>> querySuggestions(String inputWord) {
         switch (inputWord) {
             case "2":
                 suggestions.getValue().clear();
@@ -30,11 +35,15 @@ public class StockIdComponetVM_Fake implements StockIdComponet.StockIdComponetVM
             case "3":
                 suggestions.getValue().clear();
                 break;
+            case "4":
+                errorMsg.setValue("發生查詢例外");
+                break;
             default:
                 suggestions.getValue().clear();
                 suggestions.getValue().add("沒有此建議選項");
                 break;
         }
+        return null;
     }
 
     @Override
@@ -50,6 +59,14 @@ public class StockIdComponetVM_Fake implements StockIdComponet.StockIdComponetVM
     @Override
     public String parceInputStockId(String inputStockId) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public StringProperty getErrorMsgProperty() {
+        if (errorMsg == null) {
+            errorMsg = new SimpleStringProperty();
+        }
+        return errorMsg;
     }
 
 }

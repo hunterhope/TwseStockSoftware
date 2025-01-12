@@ -9,6 +9,7 @@ import com.hunterhope.twsestocksoftware.componet.StockIdComponet;
 import com.hunterhope.twsestocksoftware.componet.StockIdComponet.StockIdComponetVM;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -21,6 +22,7 @@ import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import static org.testfx.matcher.control.LabeledMatchers.hasText;
+import static org.testfx.assertions.api.Assertions.assertThat;
 
 /**
  *
@@ -124,4 +126,17 @@ public class StockIdComponetTest {
         //驗證輸入全部清除
         Assertions.assertTrue(cb.getValue().equals(""),"輸入應該清除");
     }    
+    
+    @Test
+    public void componet_query_suggestion_ocure_exception_has_alert(FxRobot robot){
+        //測試物件
+        ComboBox cb = robot.lookup(".combo-box").query();
+        //使用者互動行為
+        //1.點擊ComboBox使他成為焦點
+        robot.clickOn(cb, MouseButton.PRIMARY);
+        //2.按下鍵盤數字鍵
+        robot.type(KeyCode.NUMPAD4,1);
+        //驗證畫面出現Alert
+        assertThat(robot.lookup(".alert")).isNotNull();
+    }
 }

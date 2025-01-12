@@ -4,21 +4,24 @@
  */
 package com.hunterhope.twsestocksoftware.componet;
 
+import com.hunterhope.twsestocksoftware.viewModel.StockIdComponetVM_impl;
+import java.util.List;
+import java.util.concurrent.Executor;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.beans.value.WeakChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
+import javafx.concurrent.Task;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 
 /**
  *
@@ -28,19 +31,21 @@ public class StockIdComponet extends HBox {
 
     public interface StockIdComponetVM {
 
-        public void querySuggestions(String inputWord);
+        public Task<List<String>> querySuggestions(String inputWord);
 
         public ObjectProperty<ObservableList<String>> suggestionsProperty();
 
         public String parceInputStockId(String inputStockId);
+        
+        public StringProperty getErrorMsgProperty();
 
     }
 
     private final ComboBox<String> stockIdComb = new ComboBox<>();;
     private final StockIdComponetVM vm;
 
-    public StockIdComponet() {
-        vm = new StockIdComponetVM_impl();
+    public StockIdComponet(Executor executor) {
+        vm = new StockIdComponetVM_impl(executor);
         otherInit();
 
     }
@@ -109,7 +114,16 @@ public class StockIdComponet extends HBox {
                     default:
                         break;
                 }
-                System.out.println("案件按下: "+ke.getCode());
+            }
+        });
+        vm.getErrorMsgProperty().addListener(new ChangeListener<String>(){
+            @Override
+            public void changed(ObservableValue<? extends String> ov, String t, String t1) {
+                //使用警告通知使用者
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("查詢股票發生問題");
+                alert.setContentText(t1);
+                alert.show();
             }
         });
     }
