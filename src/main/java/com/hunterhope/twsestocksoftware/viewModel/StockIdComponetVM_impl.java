@@ -7,6 +7,7 @@ package com.hunterhope.twsestocksoftware.viewModel;
 import com.hunterhope.twsestockid.service.TwseStockIdService;
 import com.hunterhope.twsestocksoftware.componet.StockIdComponet.StockIdComponetVM;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -26,27 +27,25 @@ public class StockIdComponetVM_impl implements StockIdComponetVM {
     private StringProperty errorMsg;
     private final Executor executor;
     private final TwseStockIdService tsis;
-    
+
     public StockIdComponetVM_impl(Executor executor) {
         this.executor = executor;
-        tsis= new TwseStockIdService();
+        tsis = new TwseStockIdService();
     }
 
     public StockIdComponetVM_impl(Executor executor, TwseStockIdService tsis) {
         this.executor = executor;
         this.tsis = tsis;
     }
-    
-    
-    
+
     @Override
     public Task<List<String>> querySuggestions(String inputWord) {
         //產生執行緒任務,此任務不需要回報任何進度
-        Task<List<String>> task = new Task<>(){
+        Task<List<String>> task = new Task<>() {
             @Override
             protected List<String> call() throws Exception {
                 //確認使用者輸入不是空白字串
-                if(!inputWord.isBlank()){
+                if (!inputWord.isBlank()) {
                     //發出請求
                     return tsis.suggestStockId(inputWord);
                 }
@@ -64,11 +63,11 @@ public class StockIdComponetVM_impl implements StockIdComponetVM {
             protected void failed() {
                 //將失敗原因通知使用者
                 String[] msgs = getException().getMessage().split(" ");
-                errorMsg.setValue(msgs.length>1?msgs[1]:msgs[0]);    
-                
+                errorMsg.setValue(msgs.length > 1 ? msgs[1] : msgs[0]);
+
             }
         };
-        
+
         //執行任務
         executor.execute(task);
         return task;
@@ -86,12 +85,38 @@ public class StockIdComponetVM_impl implements StockIdComponetVM {
 
     @Override
     public String parceInputStockId(String inputStockId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (suggestions.getValue().isEmpty()) {
+            Task<List<String>> task = querySuggestions(inputStockId);
+            try {
+                task.get();//等待結果完成
+            } catch (InterruptedException | ExecutionException ex) {
+            }
+        }
+        //找出正確的選項
+        String result = suggestions.getValue().stream()
+                .filter(e -> {
+                    if(e.equals(inputStockId)){
+                        return true;
+                    }
+                    String[] split = e.split(" ");
+                    if(split[0].equals(inputStockId)){
+                        return true;
+                    }
+                    return split[1].equals(inputStockId);
+                })
+                .findFirst()
+                .orElseGet(() -> "NAN");
+        if (result.equals("NAN")) {
+            errorMsg.setValue("股票代號不明確: " + inputStockId);
+            return inputStockId;
+        }
+
+        return result.split(" ")[0];
     }
 
     @Override
-    public StringProperty getErrorMsgProperty(){
-        if(errorMsg==null){
+    public StringProperty getErrorMsgProperty() {
+        if (errorMsg == null) {
             errorMsg = new SimpleStringProperty();
         }
         return errorMsg;
