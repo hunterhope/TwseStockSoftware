@@ -7,6 +7,7 @@ package com.hunterhope.twsestocksoftware.viewModel;
 import com.hunterhope.twsestockid.service.TwseStockIdService;
 import com.hunterhope.twsestocksoftware.componet.StockIdComponet.StockIdComponetVM;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import javafx.beans.property.ObjectProperty;
@@ -85,33 +86,39 @@ public class StockIdComponetVM_impl implements StockIdComponetVM {
 
     @Override
     public String parceInputStockId(String inputStockId) {
-        if (suggestions.getValue().isEmpty()||suggestions.getValue().contains("請輸入查詢股票")) {
+        ensureSuggestionsHasData(inputStockId);
+        Optional<String> opt = findCorrectItems(inputStockId);
+        if (opt.isPresent()) {
+            return opt.get().split(" ")[0];
+        }
+        errorMsg.setValue("股票代號不明確或上市無此股票: " + inputStockId);
+        return inputStockId;
+    }
+
+    private Optional<String> findCorrectItems(String inputStockId) {
+        //找出正確的選項
+        return suggestions.getValue().stream()
+                .filter(e -> {
+                    if (e.equals(inputStockId)) {
+                        return true;
+                    }
+                    String[] split = e.split(" ");
+                    if (split[0].equals(inputStockId)) {
+                        return true;
+                    }
+                    return split.length > 1 ? split[1].equals(inputStockId) : false;
+                })
+                .findFirst();
+    }
+
+    private void ensureSuggestionsHasData(String inputStockId) {
+        if (suggestions.getValue().isEmpty() || suggestions.getValue().contains("請輸入查詢股票")) {
             Task<List<String>> task = querySuggestions(inputStockId);
             try {
                 task.get();//等待結果完成
             } catch (InterruptedException | ExecutionException ex) {
             }
         }
-        //找出正確的選項
-        String result = suggestions.getValue().stream()
-                .filter(e -> {
-                    if(e.equals(inputStockId)){
-                        return true;
-                    }
-                    String[] split = e.split(" ");
-                    if(split[0].equals(inputStockId)){
-                        return true;
-                    }
-                    return split.length>1?split[1].equals(inputStockId):false;
-                })
-                .findFirst()
-                .orElseGet(() -> "NAN");
-        if (result.equals("NAN")) {
-            errorMsg.setValue("股票代號不明確: " + inputStockId);
-            return inputStockId;
-        }
-
-        return result.split(" ")[0];
     }
 
     @Override
