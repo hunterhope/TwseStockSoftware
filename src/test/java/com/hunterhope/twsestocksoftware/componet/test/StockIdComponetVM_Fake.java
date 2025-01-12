@@ -38,7 +38,7 @@ public class StockIdComponetVM_Fake implements StockIdComponet.StockIdComponetVM
             case "4":
                 errorMsg.setValue("發生查詢例外");
                 break;
-            case "5":
+            case "45":
                 errorMsg.setValue("發生查詢例外");
                 break;
             default:
@@ -70,6 +70,11 @@ public class StockIdComponetVM_Fake implements StockIdComponet.StockIdComponetVM
             errorMsg = new SimpleStringProperty();
         }
         return errorMsg;
+    }
+
+    @Override
+    public void errorMsgClear() {
+        errorMsg.setValue("");
     }
 
 }

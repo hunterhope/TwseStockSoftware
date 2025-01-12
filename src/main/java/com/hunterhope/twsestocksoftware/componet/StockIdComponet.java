@@ -19,6 +19,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DialogEvent;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -38,6 +39,8 @@ public class StockIdComponet extends HBox {
         public String parceInputStockId(String inputStockId);
         
         public StringProperty getErrorMsgProperty();
+
+        public void errorMsgClear();
 
     }
 
@@ -119,10 +122,19 @@ public class StockIdComponet extends HBox {
         vm.getErrorMsgProperty().addListener(new ChangeListener<String>(){
             @Override
             public void changed(ObservableValue<? extends String> ov, String t, String t1) {
+                if(t1.isBlank()){
+                    return;
+                }
                 //使用警告通知使用者
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("查詢股票發生問題");
                 alert.setContentText(t1);
+                alert.setOnCloseRequest(new EventHandler<DialogEvent>(){
+                    @Override
+                    public void handle(DialogEvent t) {
+                        vm.errorMsgClear();
+                    }
+                });
                 alert.show();
             }
         });

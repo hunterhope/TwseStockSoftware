@@ -121,4 +121,9 @@ public class StockIdComponetVM_impl implements StockIdComponetVM {
         }
         return errorMsg;
     }
+
+    @Override
+    public void errorMsgClear() {
+        errorMsg.setValue("");
+    }
 }

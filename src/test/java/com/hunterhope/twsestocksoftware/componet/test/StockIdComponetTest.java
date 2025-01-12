@@ -160,7 +160,6 @@ public class StockIdComponetTest {
         robot.type(KeyCode.NUMPAD4, 1);
         //驗證畫面出現Alert
         Node alert = robot.lookup(".alert").query();
-        System.out.println("alert="+alert);
         assertThat(alert).isNotNull();
         //關閉提示訊息
         robot.clickOn(".button", MouseButton.PRIMARY);
@@ -170,7 +169,6 @@ public class StockIdComponetTest {
         //第2次驗證
          //驗證畫面出現Alert
         Node alert2 = robot.lookup(".alert").query();
-        System.out.println("alert2="+alert2);
         assertThat(alert2).isNotNull();
     }
 }
