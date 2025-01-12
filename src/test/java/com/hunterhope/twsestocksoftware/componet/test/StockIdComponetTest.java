@@ -9,13 +9,10 @@ import com.hunterhope.twsestocksoftware.componet.StockIdComponet.StockIdComponet
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Dialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +22,6 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import static org.testfx.matcher.control.LabeledMatchers.hasText;
 import static org.testfx.assertions.api.Assertions.assertThat;
-import org.testfx.service.query.NodeQuery;
 
 /**
  *
@@ -91,19 +87,23 @@ public class StockIdComponetTest {
     @Test
     public void componet_prompt_items_click_not_query_suggestions(FxRobot robot) {
         //測試物件
-        ComboBox cb = robot.lookup(".combo-box").query();
+        ComboBox cb = combox_input(robot,KeyCode.NUMPAD2);
         //使用者互動行為
-        //1.點擊ComboBox使他成為焦點
-        robot.clickOn(cb, MouseButton.PRIMARY);
-        //2.按下鍵盤數字鍵
-        robot.type(KeyCode.NUMPAD2, 1);
-        //3.按下第一個選項
         robot.clickOn(hasText("2002 中鋼"), MouseButton.PRIMARY);
         //驗證下拉選單內容沒有改變,沒有呼叫查詢方法
         Assertions.assertTrue(cb.getItems().contains("2002 中鋼"), "應該包含選項 '2002 中鋼'");
         Mockito.verify(spyVm, Mockito.times(1)).querySuggestions(Mockito.any());
     }
-
+    
+    public ComboBox combox_input(FxRobot robot,KeyCode keyCode){
+        ComboBox cb = robot.lookup(".combo-box").query();
+        //使用者互動行為
+        //1.點擊ComboBox使他成為焦點
+        robot.clickOn(cb, MouseButton.PRIMARY);
+        //2.按下鍵盤數字鍵
+        robot.type(keyCode, 1);
+        return cb;
+    }
     /**
      * 測試按下清除按鍵,可以清空輸入 清除按鍵有2個: DELETE/BACK_SPACE
      */
