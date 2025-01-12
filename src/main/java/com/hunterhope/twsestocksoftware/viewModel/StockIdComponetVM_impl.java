@@ -85,7 +85,7 @@ public class StockIdComponetVM_impl implements StockIdComponetVM {
 
     @Override
     public String parceInputStockId(String inputStockId) {
-        if (suggestions.getValue().isEmpty()) {
+        if (suggestions.getValue().isEmpty()||suggestions.getValue().contains("請輸入查詢股票")) {
             Task<List<String>> task = querySuggestions(inputStockId);
             try {
                 task.get();//等待結果完成
@@ -102,7 +102,7 @@ public class StockIdComponetVM_impl implements StockIdComponetVM {
                     if(split[0].equals(inputStockId)){
                         return true;
                     }
-                    return split[1].equals(inputStockId);
+                    return split.length>1?split[1].equals(inputStockId):false;
                 })
                 .findFirst()
                 .orElseGet(() -> "NAN");

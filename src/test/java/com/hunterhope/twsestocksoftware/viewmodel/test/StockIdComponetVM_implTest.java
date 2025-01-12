@@ -213,6 +213,25 @@ public class StockIdComponetVM_implTest {
         Assertions.assertTrue(result.equals("2002"),"結果要'2002'但不對: "+result);
         
     }
+    @Test
+    public void test_parceInputStockId_parse_input_2002_but_not_suggestions()throws Exception{
+        //模擬依賴
+        TwseStockIdService tsis = Mockito.mock(TwseStockIdService.class);
+        //模擬依賴
+        Mockito.when(tsis.suggestStockId(Mockito.any())).thenReturn(List.of("2002 中鋼", "2003 同光", "2004 大鋼", "2005 友力", "2006 東和鋼鐵", "2007 燁興"));
+        //建立代測物件
+        StockIdComponetVM vm = new StockIdComponetVM_impl(executorService, tsis);
+        //讓viewModel屬性有被綁定呼叫過
+        vm.suggestionsProperty();
+        vm.getErrorMsgProperty();
+        //跑起來
+        String result = vm.parceInputStockId("2002");
+        //驗證
+        Assertions.assertTrue(result.equals("2002"),"結果要'2002'但不對: "+result);
+        //驗證tsis只呼叫一次
+         Mockito.verify(tsis, Mockito.times(1)).suggestStockId(Mockito.any());
+        
+    }
     @Stop
     public void stopTest() {
         executorService.shutdownNow();
