@@ -38,6 +38,9 @@ public class StockIdComponetVM_Fake implements StockIdComponet.StockIdComponetVM
             case "4":
                 errorMsg.setValue("發生查詢例外");
                 break;
+            case "5":
+                errorMsg.setValue("發生查詢例外");
+                break;
             default:
                 suggestions.getValue().clear();
                 suggestions.getValue().add("沒有此建議選項");
