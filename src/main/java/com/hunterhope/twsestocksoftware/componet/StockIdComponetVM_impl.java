@@ -24,6 +24,8 @@ public class StockIdComponetVM_impl implements StockIdComponetVM {
             case "2":
                 suggestions.getValue().clear();
                 suggestions.getValue().add("2002 中鋼");
+                suggestions.getValue().add("2003 中鋼2");
+                suggestions.getValue().add("2004 中鋼3");
                 break;
             case "3":
                 suggestions.getValue().clear();
@@ -43,6 +45,11 @@ public class StockIdComponetVM_impl implements StockIdComponetVM {
             suggestions = new SimpleObjectProperty<>(data);//這個物件裡沒有任何可被觀察的List
         }
         return suggestions;
+    }
+
+    @Override
+    public String parceInputStockId(String inputStockId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

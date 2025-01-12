@@ -45,48 +45,41 @@ public class StockIdComponetTest {
         //開演
         stage.show();
     }
-    
+    /**
+     * 測試回傳解果不是空則顯示提示
+     */
     @Test
-    public void componet_has_suggestion_item_2020中鋼(FxRobot robot){
+    public void componet_suggestions_not_empty_then_prompt_show(FxRobot robot){
         //測試物件
         ComboBox cb = robot.lookup(".combo-box").query();
         //使用者互動行為
         //1.點擊ComboBox使他成為焦點
         robot.clickOn(cb, MouseButton.PRIMARY);
-        //2.按下鍵盤數字鍵
-        robot.type(KeyCode.NUMPAD2,1);
-        //驗證下拉選單中會有'2002 中鋼'的其中一個選項
-        Assertions.assertTrue(cb.getItems().contains("2002 中鋼"),"應該包含選項 '2002 中鋼'");
-    }
-    
-    @Test
-    public void componet_items_has_show(FxRobot robot){
-        //測試物件
-        ComboBox cb = robot.lookup(".combo-box").query();
-        //使用者互動行為
-        //1.點擊ComboBox使他成為焦點
-        robot.clickOn(cb, MouseButton.PRIMARY);
-        //2.按下鍵盤數字鍵
+        //2.按下鍵盤數字鍵2,假的VM會回傳有解果的提示
         robot.type(KeyCode.NUMPAD2,1);
         //驗證下拉選單有顯示列表
         Assertions.assertTrue(cb.isShowing(),"下拉選單沒有顯示");
     }
-    
+    /**
+     * 測試回傳解果是空值則提示不顯示
+     */
     @Test
-    public void componet_items_change_empty_items_not_show(FxRobot robot){
+    public void componet_suggestions_are_empty_then_prompt_not_show(FxRobot robot){
         //測試物件
         ComboBox cb = robot.lookup(".combo-box").query();
         //使用者互動行為
         //1.點擊ComboBox使他成為焦點
         robot.clickOn(cb, MouseButton.PRIMARY);
-        //2.按下鍵盤數字鍵
+        //2.按下鍵盤數字鍵3,假的VM會回傳空的結果
         robot.type(KeyCode.NUMPAD3,1);
         //驗證下拉選單沒有顯示列表
         Assertions.assertFalse(cb.isShowing(),"下拉選單有顯示");
     }
-    
+    /**
+     * 測試按下提示選項,則不再發出查詢動作
+     */
     @Test
-    public void componet_items_click_not_update_items(FxRobot robot){
+    public void componet_prompt_items_click_not_query_suggestions(FxRobot robot){
         //測試物件
         ComboBox cb = robot.lookup(".combo-box").query();
         //使用者互動行為
@@ -100,4 +93,35 @@ public class StockIdComponetTest {
         Assertions.assertTrue(cb.getItems().contains("2002 中鋼"),"應該包含選項 '2002 中鋼'");
         Mockito.verify(spyVm, Mockito.times(1)).querySuggestions(Mockito.any());
     }
+    /**
+     * 測試按下清除按鍵,可以清空輸入
+     * 清除按鍵有2個: DELETE/BACK_SPACE
+     */
+    @Test
+    public void componet_pressed_delete_clear_input(FxRobot robot){
+        //測試物件
+        ComboBox cb = robot.lookup(".combo-box").query();
+        //使用者互動行為
+        //1.點擊ComboBox使他成為焦點
+        robot.clickOn(cb, MouseButton.PRIMARY);
+        //2.按下鍵盤數字鍵
+        robot.type(KeyCode.NUMPAD2,1);
+        //3.按下第一個選項
+        robot.clickOn(hasText("2002 中鋼"), MouseButton.PRIMARY);
+        //4.按下鍵盤清除鍵
+        robot.type(KeyCode.DELETE,1);
+        //驗證輸入全部清除
+        Assertions.assertTrue(cb.getValue().equals(""),"輸入應該清除");
+        
+        //1.點擊ComboBox使他成為焦點
+        robot.clickOn(cb, MouseButton.PRIMARY);
+        //2.按下鍵盤數字鍵
+        robot.type(KeyCode.NUMPAD2,1);
+        //3.按下第一個選項
+        robot.clickOn(hasText("2002 中鋼"), MouseButton.PRIMARY);
+        //4.按下鍵盤清除鍵
+        robot.type(KeyCode.BACK_SPACE,1);
+        //驗證輸入全部清除
+        Assertions.assertTrue(cb.getValue().equals(""),"輸入應該清除");
+    }    
 }

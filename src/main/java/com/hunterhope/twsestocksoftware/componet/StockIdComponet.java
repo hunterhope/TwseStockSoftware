@@ -9,10 +9,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 
@@ -28,10 +32,11 @@ public class StockIdComponet extends HBox {
 
         public ObjectProperty<ObservableList<String>> suggestionsProperty();
 
+        public String parceInputStockId(String inputStockId);
+
     }
 
     private final ComboBox<String> stockIdComb = new ComboBox<>();;
-    private final Button searchBtn = new Button("查詢");
     private final StockIdComponetVM vm;
 
     public StockIdComponet() {
@@ -61,13 +66,13 @@ public class StockIdComponet extends HBox {
         //comb讓他可以編輯
         stockIdComb.setEditable(true);
         //加入HBox布局
-        getChildren().addAll(stockIdLab, stockIdComb, searchBtn);
+        getChildren().addAll(stockIdLab, stockIdComb);
         //設定每個子元件間距
         setSpacing(8);
         //設定子元件對齊方式: 水平至中/垂直至中文字線
         setAlignment(Pos.BASELINE_CENTER);
         //設定HBox大小為指定大小 310試出來的大小
-        setMaxWidth(310);
+        setMaxWidth(270);
         //測試用 看看此元件實際在布局中涵蓋的大小 利用背景色或邊框
 //        setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 5; -fx-padding: 10;");
     }
@@ -78,7 +83,7 @@ public class StockIdComponet extends HBox {
             @Override
             public void changed(ObservableValue<? extends String> ov, String os, String ns) {
                 //假如輸入的字串不是空字串在發出查詢
-                if (stockIdComb.getSelectionModel().isEmpty()&&!ns.isBlank()) {
+                if (stockIdComb.getSelectionModel().isEmpty()) {//空字串邏輯給vm判斷
                     vm.querySuggestions(ns);
                 }
             }
@@ -93,6 +98,20 @@ public class StockIdComponet extends HBox {
                 }
             }
         });
+        stockIdComb.getEditor().setOnKeyPressed(new EventHandler<KeyEvent>(){
+            @Override
+            public void handle(KeyEvent ke) {
+                switch (ke.getCode()) {
+                    case DELETE:
+                    case BACK_SPACE:
+                        stockIdComb.setValue("");
+                        break;
+                    default:
+                        break;
+                }
+                System.out.println("案件按下: "+ke.getCode());
+            }
+        });
     }
 
     private void bindData() {
@@ -101,6 +120,10 @@ public class StockIdComponet extends HBox {
             throw new RuntimeException("要綁定的資料是空的會造成監聽器失效");
         }
         stockIdComb.itemsProperty().bind(vm.suggestionsProperty());
+    }
+    
+    public String getInputStockId(){
+        return vm.parceInputStockId(stockIdComb.getValue());
     }
 
 }
