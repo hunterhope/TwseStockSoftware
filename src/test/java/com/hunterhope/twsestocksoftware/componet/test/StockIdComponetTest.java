@@ -55,12 +55,7 @@ public class StockIdComponetTest {
     @Test
     public void componet_suggestions_not_empty_then_prompt_show(FxRobot robot) {
         //測試物件
-        ComboBox cb = robot.lookup(".combo-box").query();
-        //使用者互動行為
-        //1.點擊ComboBox使他成為焦點
-        robot.clickOn(cb, MouseButton.PRIMARY);
-        //2.按下鍵盤數字鍵2,假的VM會回傳有解果的提示
-        robot.type(KeyCode.NUMPAD2, 1);
+        ComboBox cb = combox_input(robot,KeyCode.NUMPAD2);
         //驗證下拉選單有顯示列表
         Assertions.assertTrue(cb.isShowing(), "下拉選單沒有顯示");
     }
@@ -71,12 +66,7 @@ public class StockIdComponetTest {
     @Test
     public void componet_suggestions_are_empty_then_prompt_not_show(FxRobot robot) {
         //測試物件
-        ComboBox cb = robot.lookup(".combo-box").query();
-        //使用者互動行為
-        //1.點擊ComboBox使他成為焦點
-        robot.clickOn(cb, MouseButton.PRIMARY);
-        //2.按下鍵盤數字鍵3,假的VM會回傳空的結果
-        robot.type(KeyCode.NUMPAD3, 1);
+        ComboBox cb = combox_input(robot,KeyCode.NUMPAD3);
         //驗證下拉選單沒有顯示列表
         Assertions.assertFalse(cb.isShowing(), "下拉選單有顯示");
     }
@@ -109,41 +99,24 @@ public class StockIdComponetTest {
      */
     @Test
     public void componet_pressed_delete_clear_input(FxRobot robot) {
-        //測試物件
-        ComboBox cb = robot.lookup(".combo-box").query();
-        //使用者互動行為
-        //1.點擊ComboBox使他成為焦點
-        robot.clickOn(cb, MouseButton.PRIMARY);
-        //2.按下鍵盤數字鍵
-        robot.type(KeyCode.NUMPAD2, 1);
-        //3.按下第一個選項
+        ComboBox cb = combox_input(robot,KeyCode.NUMPAD2);
+        //按下第一個選項
         robot.clickOn(hasText("2002 中鋼"), MouseButton.PRIMARY);
-        //4.按下鍵盤清除鍵
-        robot.type(KeyCode.DELETE, 1);
+        combox_input(robot,KeyCode.DELETE);
         //驗證輸入全部清除
         Assertions.assertTrue(cb.getValue().equals(""), "輸入應該清除");
 
-        //1.點擊ComboBox使他成為焦點
-        robot.clickOn(cb, MouseButton.PRIMARY);
-        //2.按下鍵盤數字鍵
-        robot.type(KeyCode.NUMPAD2, 1);
-        //3.按下第一個選項
+        combox_input(robot, KeyCode.NUMPAD2);
+        //按下第一個選項
         robot.clickOn(hasText("2002 中鋼"), MouseButton.PRIMARY);
-        //4.按下鍵盤清除鍵
-        robot.type(KeyCode.BACK_SPACE, 1);
+        combox_input(robot,KeyCode.BACK_SPACE);
         //驗證輸入全部清除
         Assertions.assertTrue(cb.getValue().equals(""), "輸入應該清除");
     }
 
     @Test
     public void componet_query_suggestion_ocure_exception_has_alert(FxRobot robot) {
-        //測試物件
-        ComboBox cb = robot.lookup(".combo-box").query();
-        //使用者互動行為
-        //1.點擊ComboBox使他成為焦點
-        robot.clickOn(cb, MouseButton.PRIMARY);
-        //2.按下鍵盤數字鍵
-        robot.type(KeyCode.NUMPAD4, 1);
+        combox_input(robot,KeyCode.NUMPAD4);
         //驗證畫面出現Alert
         Node alert = robot.lookup(".alert").query();
         assertThat(alert).isNotNull();
@@ -151,21 +124,13 @@ public class StockIdComponetTest {
 
     @Test
     public void componet_query_suggestion_ocure_thesame_error_msg(FxRobot robot) {
-        //測試物件
-        ComboBox cb = robot.lookup(".combo-box").query();
-        //使用者互動行為
-        //1.點擊ComboBox使他成為焦點
-        robot.clickOn(cb, MouseButton.PRIMARY);
-        //2.按下鍵盤數字鍵
-        robot.type(KeyCode.NUMPAD4, 1);
+        combox_input(robot,KeyCode.NUMPAD4);
         //驗證畫面出現Alert
         Node alert = robot.lookup(".alert").query();
         assertThat(alert).isNotNull();
         //關閉提示訊息
         robot.clickOn(".button", MouseButton.PRIMARY);
-        robot.clickOn(cb, MouseButton.PRIMARY);
-        //2.按下鍵盤數字鍵
-        robot.type(KeyCode.NUMPAD5, 1);
+        combox_input(robot,KeyCode.NUMPAD5);
         //第2次驗證
          //驗證畫面出現Alert
         Node alert2 = robot.lookup(".alert").query();
