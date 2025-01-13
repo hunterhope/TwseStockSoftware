@@ -53,7 +53,7 @@ public class StockIdComponetVM_implTest {
         StockIdComponetVM vm = new StockIdComponetVM_impl(executorService, tsis);
         //讓viewModel屬性有被綁定呼叫過
         vm.suggestionsProperty();
-        vm.getErrorMsgProperty();
+        vm.errorMsgProperty();
         //跑起來
         Task<List<String>> task = vm.querySuggestions("測試ID");
         //等待任務執行完畢
@@ -78,7 +78,7 @@ public class StockIdComponetVM_implTest {
         StockIdComponetVM vm = new StockIdComponetVM_impl(executorService, tsis);
         //讓viewModel屬性有被綁定呼叫過
         vm.suggestionsProperty();
-        vm.getErrorMsgProperty();
+        vm.errorMsgProperty();
         //跑起來
         Task<List<String>> task = vm.querySuggestions("測試ID");
         //等待任務執行完畢
@@ -90,7 +90,7 @@ public class StockIdComponetVM_implTest {
             Mockito.verify(tsis, Mockito.times(1)).suggestStockId(Mockito.any());
             waitforPropertyContentChange();
             //驗證vm的錯誤訊息
-            Assertions.assertTrue(vm.getErrorMsgProperty().getValue().equals("查詢發生例外"), "例外訊息不對");
+            Assertions.assertTrue(vm.errorMsgProperty().getValue().equals("查詢發生例外"), "例外訊息不對");
         }
 
     }
@@ -105,7 +105,7 @@ public class StockIdComponetVM_implTest {
         StockIdComponetVM vm = new StockIdComponetVM_impl(executorService, tsis);
         //讓viewModel屬性有被綁定呼叫過
         vm.suggestionsProperty();
-        vm.getErrorMsgProperty();
+        vm.errorMsgProperty();
         //跑起來
         Task<List<String>> task = vm.querySuggestions(" ");
         //等待任務執行完畢
@@ -134,7 +134,7 @@ public class StockIdComponetVM_implTest {
         StockIdComponetVM vm = new StockIdComponetVM_impl(executorService, tsis);
         //讓viewModel屬性有被綁定呼叫過
         vm.suggestionsProperty();
-        vm.getErrorMsgProperty();
+        vm.errorMsgProperty();
         //讓viewModel有值
         Task<List<String>> task = vm.querySuggestions("2");
         //等待任務執行完畢
@@ -157,7 +157,7 @@ public class StockIdComponetVM_implTest {
         StockIdComponetVM vm = new StockIdComponetVM_impl(executorService, tsis);
         //讓viewModel屬性有被綁定呼叫過
         vm.suggestionsProperty();
-        vm.getErrorMsgProperty();
+        vm.errorMsgProperty();
         //讓viewModel有值
         Task<List<String>> task = vm.querySuggestions("2");
         //等待任務執行完畢
@@ -179,7 +179,7 @@ public class StockIdComponetVM_implTest {
         StockIdComponetVM vm = new StockIdComponetVM_impl(executorService, tsis);
         //讓viewModel屬性有被綁定呼叫過
         vm.suggestionsProperty();
-        vm.getErrorMsgProperty();
+        vm.errorMsgProperty();
         //讓viewModel有值
         Task<List<String>> task = vm.querySuggestions("2");
         //等待任務執行完畢
@@ -201,7 +201,7 @@ public class StockIdComponetVM_implTest {
         StockIdComponetVM vm = new StockIdComponetVM_impl(executorService, tsis);
         //讓viewModel屬性有被綁定呼叫過
         vm.suggestionsProperty();
-        vm.getErrorMsgProperty();
+        vm.errorMsgProperty();
         //讓viewModel有值
         Task<List<String>> task = vm.querySuggestions("中鋼");
         //等待任務執行完畢
@@ -223,7 +223,7 @@ public class StockIdComponetVM_implTest {
         StockIdComponetVM vm = new StockIdComponetVM_impl(executorService, tsis);
         //讓viewModel屬性有被綁定呼叫過
         vm.suggestionsProperty();
-        vm.getErrorMsgProperty();
+        vm.errorMsgProperty();
         //跑起來
         String result = vm.parceInputStockId("2002");
         //驗證

@@ -122,7 +122,7 @@ public class StockIdComponetVM_impl implements StockIdComponetVM {
     }
 
     @Override
-    public StringProperty getErrorMsgProperty() {
+    public StringProperty errorMsgProperty() {
         if (errorMsg == null) {
             errorMsg = new SimpleStringProperty();
         }

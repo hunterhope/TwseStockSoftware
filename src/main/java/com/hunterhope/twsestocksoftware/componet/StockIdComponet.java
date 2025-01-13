@@ -38,7 +38,7 @@ public class StockIdComponet extends HBox {
 
         public String parceInputStockId(String inputStockId);
         
-        public StringProperty getErrorMsgProperty();
+        public StringProperty errorMsgProperty();
 
         public void errorMsgClear();
 
@@ -119,7 +119,7 @@ public class StockIdComponet extends HBox {
                 }
             }
         });
-        vm.getErrorMsgProperty().addListener(new ChangeListener<String>(){
+        vm.errorMsgProperty().addListener(new ChangeListener<String>(){
             @Override
             public void changed(ObservableValue<? extends String> ov, String t, String t1) {
                 if(t1.isBlank()){

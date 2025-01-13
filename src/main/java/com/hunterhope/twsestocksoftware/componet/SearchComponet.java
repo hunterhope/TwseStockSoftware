@@ -4,7 +4,9 @@
  */
 package com.hunterhope.twsestocksoftware.componet;
 
+import com.hunterhope.twsestocksoftware.data.StockDayInfo;
 import java.util.function.Supplier;
+import javafx.beans.property.ListProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -17,6 +19,9 @@ public class SearchComponet extends Button{
 
     public interface SearchComponetVM{
         public void search(String stocdId);
+
+        public ListProperty<StockDayInfo> stockDaysInfoProperty();
+
     }
     
     private final SearchComponetVM vm;
