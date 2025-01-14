@@ -6,6 +6,7 @@ package com.hunterhope.twsestocksoftware.viewModel;
 
 import com.hunterhope.twsestockid.service.TwseStockIdService;
 import com.hunterhope.twsestocksoftware.componet.StockIdComponet.StockIdComponetVM;
+import com.hunterhope.twsestocksoftware.other.HasErrorHandelTask;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -42,7 +43,7 @@ public class StockIdComponetVM_impl implements StockIdComponetVM {
     @Override
     public Task<List<String>> querySuggestions(String inputWord) {
         //產生執行緒任務,此任務不需要回報任何進度
-        Task<List<String>> task = new Task<>() {
+        Task<List<String>> task  = new HasErrorHandelTask<List<String>>(msg -> errorMsg.setValue(msg)) {
             @Override
             protected List<String> call() throws Exception {
                 //確認使用者輸入不是空白字串
@@ -58,14 +59,6 @@ public class StockIdComponetVM_impl implements StockIdComponetVM {
                 //將結果加入suggestions
                 suggestions.getValue().clear();
                 suggestions.getValue().addAll(getValue());
-            }
-
-            @Override
-            protected void failed() {
-                //將失敗原因通知使用者
-                String[] msgs = getException().getMessage().split(" ");
-                errorMsg.setValue(msgs.length > 1 ? msgs[1] : msgs[0]);
-
             }
         };
 
