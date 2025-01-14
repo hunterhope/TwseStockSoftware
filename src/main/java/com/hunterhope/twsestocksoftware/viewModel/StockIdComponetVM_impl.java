@@ -40,7 +40,7 @@ public class StockIdComponetVM_impl extends HasErrorMsgVM implements StockIdComp
     @Override
     public Task<List<String>> querySuggestions(String inputWord) {
         //產生執行緒任務,此任務不需要回報任何進度
-        Task<List<String>> task  = new HasErrorHandelTask<List<String>>(msg -> errorMsg.setValue(msg)) {
+        Task<List<String>> task  = new HasErrorHandelTask<List<String>>(this::notifyErrorMsg) {
             @Override
             protected List<String> call() throws Exception {
                 //確認使用者輸入不是空白字串

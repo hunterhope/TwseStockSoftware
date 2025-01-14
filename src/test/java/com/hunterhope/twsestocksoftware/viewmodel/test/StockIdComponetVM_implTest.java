@@ -7,6 +7,7 @@ package com.hunterhope.twsestocksoftware.viewmodel.test;
 import com.hunterhope.twsestockid.exception.TwseStockIdException;
 import com.hunterhope.twsestockid.service.TwseStockIdService;
 import com.hunterhope.twsestocksoftware.componet.StockIdComponet.StockIdComponetVM;
+import com.hunterhope.twsestocksoftware.utility.ThreadWait;
 import com.hunterhope.twsestocksoftware.viewModel.StockIdComponetVM_impl;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -26,21 +27,9 @@ import org.testfx.framework.junit5.Stop;
  *
  * @author user
  */
-public class StockIdComponetVM_implTest {
+public class StockIdComponetVM_implTest extends InitJavaFxThread{
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(1);
-
-    @BeforeAll
-    public static void setupJavaFX() {
-        try {
-            //測試環境會需要啟動JavaFx執行緒
-            Platform.startup(() -> {
-                System.out.println(" JavaFX Toolkit initialized.");
-            });
-        } catch (IllegalStateException ex) {
-            System.out.println("JavaFX runtime is activity.");
-        }
-    }
 
     @Test
     public void test_success_get_net_data() throws Exception {
@@ -60,7 +49,7 @@ public class StockIdComponetVM_implTest {
         task.get();
         //驗證tsis有被呼叫
         Mockito.verify(tsis, Mockito.times(1)).suggestStockId(Mockito.any());
-        waitforPropertyContentChange();
+        ThreadWait.waitforPropertyContentChange();
         //驗證vm的建議選項不是空的
         Assertions.assertTrue(!vm.suggestionsProperty().getValue().isEmpty(), "建議選項是空的");
         //驗證建議選項內容
@@ -88,7 +77,7 @@ public class StockIdComponetVM_implTest {
         } catch (ExecutionException ex) {
             //驗證tsis有被呼叫
             Mockito.verify(tsis, Mockito.times(1)).suggestStockId(Mockito.any());
-            waitforPropertyContentChange();
+            ThreadWait.waitforPropertyContentChange();
             //驗證vm的錯誤訊息
             Assertions.assertTrue(vm.errorMsgProperty().getValue().equals("查詢發生例外"), "例外訊息不對");
         }
@@ -112,17 +101,11 @@ public class StockIdComponetVM_implTest {
         task.get();
         //驗證tsis沒被呼叫
         Mockito.verify(tsis, Mockito.times(0)).suggestStockId(Mockito.any());
-        waitforPropertyContentChange();
+        ThreadWait.waitforPropertyContentChange();
         //驗證vm的建議選項是空的
         Assertions.assertTrue(vm.suggestionsProperty().getValue().isEmpty(), "建議選項是空的");
     }
 
-    private void waitforPropertyContentChange() throws InterruptedException {
-        //確保JavaFx的執行緒任務都結束,在讀取getValue()時,資料才是正確的
-        CountDownLatch latch = new CountDownLatch(1);
-        Platform.runLater(latch::countDown);
-        latch.await();
-    }
 
     @Test
     public void test_parceInputStockId_click_items()throws Exception{
@@ -139,7 +122,7 @@ public class StockIdComponetVM_implTest {
         Task<List<String>> task = vm.querySuggestions("2");
         //等待任務執行完畢
         task.get();
-        waitforPropertyContentChange();
+        ThreadWait.waitforPropertyContentChange();
         //跑起來
         String result = vm.parceInputStockId("2002 中鋼");
         //驗證
@@ -162,7 +145,7 @@ public class StockIdComponetVM_implTest {
         Task<List<String>> task = vm.querySuggestions("2");
         //等待任務執行完畢
         task.get();
-        waitforPropertyContentChange();
+        ThreadWait.waitforPropertyContentChange();
         //跑起來
         String result = vm.parceInputStockId("2");
         //驗證
@@ -184,7 +167,7 @@ public class StockIdComponetVM_implTest {
         Task<List<String>> task = vm.querySuggestions("2");
         //等待任務執行完畢
         task.get();
-        waitforPropertyContentChange();
+        ThreadWait.waitforPropertyContentChange();
         //跑起來
         String result = vm.parceInputStockId("2002");
         //驗證
@@ -206,7 +189,7 @@ public class StockIdComponetVM_implTest {
         Task<List<String>> task = vm.querySuggestions("中鋼");
         //等待任務執行完畢
         task.get();
-        waitforPropertyContentChange();
+        ThreadWait.waitforPropertyContentChange();
         //跑起來
         String result = vm.parceInputStockId("中鋼");
         //驗證

@@ -24,4 +24,8 @@ public abstract class HasErrorMsgVM {
     public void errorMsgClear() {
         errorMsg.setValue("");
     }
+    
+    public void notifyErrorMsg(String msg){
+        errorMsg.setValue(msg);
+    }
 }

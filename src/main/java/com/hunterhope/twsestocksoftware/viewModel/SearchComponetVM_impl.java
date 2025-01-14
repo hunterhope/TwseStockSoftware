@@ -7,32 +7,38 @@ package com.hunterhope.twsestocksoftware.viewModel;
 import com.hunterhope.twsestocksoftware.componet.SearchComponet;
 import com.hunterhope.twsestocksoftware.componet.SearchComponet.SearchComponetVM;
 import com.hunterhope.twsestocksoftware.data.StockDayInfo;
+import com.hunterhope.twsestocksoftware.other.HasErrorHandelTask;
 import com.hunterhope.twsestocksoftware.repository.StockDayInfoRepository;
 import java.util.List;
+import java.util.concurrent.Executor;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 
 /**
  *
  * @author user
  */
-public class SearchComponetVM_impl implements SearchComponetVM{
+public class SearchComponetVM_impl extends HasErrorMsgVM implements SearchComponetVM{
     private final StockDayInfoRepository sdir;
-    private final ListProperty<StockDayInfo> stockDaysInfo = new SimpleListProperty<>();
-
-    public SearchComponetVM_impl() {
+    private final ListProperty<StockDayInfo> stockDaysInfo = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private final Executor executor;
+    
+    public SearchComponetVM_impl(Executor executor) {
         sdir = new StockDayInfoRepository();
+        this.executor=executor;
     }
 
-    public SearchComponetVM_impl(StockDayInfoRepository sdir) {
+    public SearchComponetVM_impl(StockDayInfoRepository sdir,Executor executor) {
         this.sdir = sdir;
+        this.executor=executor;
     }
     
     @Override
-    public void search(String stocdId) {
+    public Task<List<StockDayInfo>> search(String stocdId) {
         //使用其他執行緒執行
-        Task<List<StockDayInfo>> task = new Task<>(){
+        Task<List<StockDayInfo>> task = new HasErrorHandelTask<List<StockDayInfo>>(this::notifyErrorMsg){
             @Override
             protected List<StockDayInfo> call() throws Exception {
                 //請資訊庫給資訊
@@ -46,8 +52,8 @@ public class SearchComponetVM_impl implements SearchComponetVM{
             }
             
         };
-        
-        
+        executor.execute(task);
+        return task;
     }
 
     @Override
