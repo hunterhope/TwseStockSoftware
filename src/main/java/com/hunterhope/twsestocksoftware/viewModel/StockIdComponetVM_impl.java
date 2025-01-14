@@ -13,8 +13,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -23,10 +21,9 @@ import javafx.concurrent.Task;
  *
  * @author user
  */
-public class StockIdComponetVM_impl implements StockIdComponetVM {
+public class StockIdComponetVM_impl extends HasErrorMsgVM implements StockIdComponetVM {
 
     private ObjectProperty<ObservableList<String>> suggestions;
-    private StringProperty errorMsg;
     private final Executor executor;
     private final TwseStockIdService tsis;
 
@@ -79,8 +76,8 @@ public class StockIdComponetVM_impl implements StockIdComponetVM {
 
     @Override
     public String parceInputStockId(String inputStockId) {
-        ensureSuggestionsHasData(inputStockId);
-        Optional<String> opt = findCorrectItems(inputStockId);
+        List<String> suggestionsData = ensureSuggestionsHasData(inputStockId);
+        Optional<String> opt = findCorrectItems(inputStockId,suggestionsData);
         if (opt.isPresent()) {
             return opt.get().split(" ")[0];
         }
@@ -88,9 +85,9 @@ public class StockIdComponetVM_impl implements StockIdComponetVM {
         return inputStockId;
     }
 
-    private Optional<String> findCorrectItems(String inputStockId) {
+    private Optional<String> findCorrectItems(String inputStockId,List<String> suggestionsData) {
         //找出正確的選項
-        return suggestions.getValue().stream()
+        return suggestionsData.stream()
                 .filter(e -> {
                     if (e.equals(inputStockId)) {
                         return true;
@@ -104,26 +101,14 @@ public class StockIdComponetVM_impl implements StockIdComponetVM {
                 .findFirst();
     }
 
-    private void ensureSuggestionsHasData(String inputStockId) {
+    private List<String> ensureSuggestionsHasData(String inputStockId) {
         if (suggestions.getValue().isEmpty() || suggestions.getValue().contains("請輸入查詢股票")) {
             Task<List<String>> task = querySuggestions(inputStockId);
             try {
-                task.get();//等待結果完成
+                return task.get();//等待結果完成
             } catch (InterruptedException | ExecutionException ex) {
             }
         }
-    }
-
-    @Override
-    public StringProperty errorMsgProperty() {
-        if (errorMsg == null) {
-            errorMsg = new SimpleStringProperty();
-        }
-        return errorMsg;
-    }
-
-    @Override
-    public void errorMsgClear() {
-        errorMsg.setValue("");
+        return suggestions.get();
     }
 }
