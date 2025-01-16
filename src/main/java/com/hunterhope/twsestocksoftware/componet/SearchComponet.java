@@ -25,8 +25,6 @@ public class SearchComponet extends Button{
 
         public ListProperty<StockDayInfo> stockDaysInfoProperty();
 
-        public BooleanProperty updateProperty();
-
     }
     
     private final SearchComponetVM vm;

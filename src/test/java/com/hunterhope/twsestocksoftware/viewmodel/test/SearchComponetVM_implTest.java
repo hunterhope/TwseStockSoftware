@@ -24,35 +24,10 @@ import org.testfx.framework.junit5.Stop;
 public class SearchComponetVM_implTest extends InitJavaFxThread{
     private ExecutorService es = Executors.newFixedThreadPool(1);
     @Test
-    public void testSearch_DB_then_show_update_progress_bar()throws Exception{
-        //模擬依賴物件
-        StockDayInfoRepository sdir = Mockito.mock(StockDayInfoRepository.class);
-        Mockito.when(sdir.queryAllDayInfo(Mockito.any())).thenReturn(List.of());
-        //測試物件
-        SearchComponetVM vm = new SearchComponetVM_impl(sdir,es);
-        //跑起來
-        vm.search("2323");
-        Assertions.assertTrue(vm.updateProperty().getValue(),"沒有設定更新旗標true");
-    }
-    
-    @Test
-    public void testSearch_DB_finish_then_close_update_progress_bar()throws Exception{
-        //模擬依賴物件
-        StockDayInfoRepository sdir = Mockito.mock(StockDayInfoRepository.class);
-        Mockito.when(sdir.queryAllDayInfo(Mockito.any())).thenReturn(List.of());
-        //測試物件
-        SearchComponetVM vm = new SearchComponetVM_impl(sdir,es);
-        //跑起來
-        vm.search("2323").get();
-        ThreadWait.waitforPropertyContentChange();
-        Assertions.assertFalse(vm.updateProperty().getValue(),"沒有設定更新旗標成false");
-    }
-    
-    @Test
     public void testSearch_DB_has_data()throws Exception{
         //模擬依賴物件
         StockDayInfoRepository sdir = Mockito.mock(StockDayInfoRepository.class);
-        Mockito.when(sdir.queryAllDayInfo(Mockito.any())).thenReturn(List.of(new StockDayInfo()));
+        Mockito.when(sdir.queryAllDayInfo(Mockito.any(),Mockito.any())).thenReturn(List.of(new StockDayInfo()));
         //測試物件
         SearchComponetVM vm = new SearchComponetVM_impl(sdir,es);
         //跑起來

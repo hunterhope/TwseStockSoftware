@@ -4,16 +4,13 @@
  */
 package com.hunterhope.twsestocksoftware.viewModel;
 
-import com.hunterhope.twsestocksoftware.componet.SearchComponet;
 import com.hunterhope.twsestocksoftware.componet.SearchComponet.SearchComponetVM;
 import com.hunterhope.twsestocksoftware.data.StockDayInfo;
 import com.hunterhope.twsestocksoftware.other.HasErrorHandelTask;
 import com.hunterhope.twsestocksoftware.repository.StockDayInfoRepository;
 import java.util.List;
 import java.util.concurrent.Executor;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
@@ -26,7 +23,6 @@ public class SearchComponetVM_impl extends HasErrorMsgVM implements SearchCompon
     private final StockDayInfoRepository sdir;
     private final ListProperty<StockDayInfo> stockDaysInfo = new SimpleListProperty<>(FXCollections.observableArrayList());
     private final Executor executor;
-    private final BooleanProperty updateProperty=new SimpleBooleanProperty();
     
     public SearchComponetVM_impl(Executor executor) {
         sdir = new StockDayInfoRepository();
@@ -46,18 +42,16 @@ public class SearchComponetVM_impl extends HasErrorMsgVM implements SearchCompon
             protected List<StockDayInfo> call() throws Exception {
                 //請資訊庫給資訊
                 //最好有一個轉換步驟,不要讓顯示的資料相依於資料表
-               return sdir.queryAllDayInfo(stocdId);
+               return sdir.queryAllDayInfo(stocdId, this::updateMessage);//這邊的this是Task的
             }
 
             @Override
             protected void succeeded() {
                 stockDaysInfo.clear();
                 stockDaysInfo.addAll(getValue());
-                updateProperty.setValue(false);
             }
             
         };
-        updateProperty.setValue(true);
         executor.execute(task);
         return task;
     }
@@ -65,11 +59,6 @@ public class SearchComponetVM_impl extends HasErrorMsgVM implements SearchCompon
     @Override
     public ListProperty<StockDayInfo> stockDaysInfoProperty() {
         return stockDaysInfo;
-    }
-
-    @Override
-    public BooleanProperty updateProperty() {
-        return updateProperty;
     }
     
 }

@@ -6,6 +6,7 @@ package com.hunterhope.twsestocksoftware.repository;
 
 import com.hunterhope.twsestocksoftware.data.StockDayInfo;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  *
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public class StockDayInfoRepository {
 
-    public List<StockDayInfo> queryAllDayInfo(String stocdId) {
+    public List<StockDayInfo> queryAllDayInfo(String stocdId,Consumer<String> updateMsgAction) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
