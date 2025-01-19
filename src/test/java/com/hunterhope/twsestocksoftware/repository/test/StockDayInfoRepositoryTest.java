@@ -13,6 +13,7 @@ import com.hunterhope.twsestocksoftware.exception.StockIdNetNoDataException;
 import com.hunterhope.twsestocksoftware.repository.StockDayInfoRepository;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.function.Consumer;
 import org.junit.jupiter.api.Assertions;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
@@ -76,5 +77,25 @@ public class StockDayInfoRepositoryTest {
             Mockito.verify(tdss, Mockito.times(1)).crawl(Mockito.any(), Mockito.any(), Mockito.anyInt());
             Mockito.verify(tdqs, Mockito.times(1)).selectAllDayInfo(Mockito.any(), Mockito.any());
         }
+    }
+
+    /**
+     * 此測試會拖慢測試速度,未來可考慮移到其他地方?
+     */
+    @Test
+    public void test_updateMsgAction_has_action() throws Exception {
+        //模擬帶測物件
+        TwseDbSaveService tdss = Mockito.spy(new TwseDbSaveService());
+        TwseDbQueryService tdqs = Mockito.mock(TwseDbQueryService.class);
+        Consumer<String> mockUpdateMsgAction = Mockito.mock(Consumer.class);
+        //模擬依賴行為
+        Mockito.when(tdqs.selectAllDayInfo(Mockito.any(), Mockito.any())).thenThrow(new TwseDbQueryException("沒有資料表")).thenReturn(List.of(new StockDayInfo()));
+        Mockito.doNothing().when(mockUpdateMsgAction).accept(Mockito.any());
+        //帶測物件
+        StockDayInfoRepository sdir = new StockDayInfoRepository(tdqs, tdss);
+        //跑起來
+        sdir.queryAllDayInfo("2323", mockUpdateMsgAction);
+        //驗證
+        Mockito.verify(mockUpdateMsgAction, Mockito.atLeast(1)).accept(Mockito.any());
     }
 }
