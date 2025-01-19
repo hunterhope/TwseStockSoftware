@@ -54,7 +54,7 @@ public class StockIdComponetTest {
      */
     @Test
     public void componet_suggestions_not_empty_then_prompt_show(FxRobot robot) {
-        //測試物件
+        //測試物件2
         ComboBox cb = combox_input(robot,KeyCode.NUMPAD2);
         //驗證下拉選單有顯示列表
         Assertions.assertTrue(cb.isShowing(), "下拉選單沒有顯示");

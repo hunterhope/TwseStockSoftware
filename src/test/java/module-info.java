@@ -5,6 +5,7 @@
 
 module TwseStockSoftwareTest {
     requires com.hunterhope.twsestocksoftware;
+    requires TwseDB;
     requires TwseStockId;
     requires javafx.controls;
     requires org.junit.jupiter.api;
@@ -13,4 +14,5 @@ module TwseStockSoftwareTest {
     requires org.mockito;
     exports com.hunterhope.twsestocksoftware.componet.test;
     exports com.hunterhope.twsestocksoftware.viewmodel.test;
+    exports com.hunterhope.twsestocksoftware.repository.test;
 }

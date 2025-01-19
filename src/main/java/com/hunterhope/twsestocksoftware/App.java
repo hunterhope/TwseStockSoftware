@@ -21,11 +21,17 @@ public class App extends Application {
     private final ExecutorService es = Executors.newFixedThreadPool(1);
     @Override
     public void start(Stage stage) {
+        VBox root = new VBox();
         StockIdComponet sic = new StockIdComponet(es);
-        SearchComponet sc = new SearchComponet(()->sic.getInputStockId());
+        SearchComponet sc = new SearchComponet(()->sic.getInputStockId(),task->{
+            //建立進度條
+            //綁定任務屬性到UI畫面
+            //加入布局
+            //任務執行完畢自動從布局中移除
+        });
         HBox hBox = new HBox(sic,sc);
         hBox.setAlignment(Pos.BASELINE_CENTER);
-        VBox root = new VBox(hBox);
+        root.getChildren().add(hBox);
         root.setAlignment(Pos.CENTER);
         root.autosize();
         var scene = new Scene(root, 640, 480);

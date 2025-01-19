@@ -6,6 +6,7 @@ package com.hunterhope.twsestocksoftware.componet;
 
 import com.hunterhope.twsestocksoftware.data.StockDayInfo;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
@@ -29,16 +30,19 @@ public class SearchComponet extends Button{
     
     private final SearchComponetVM vm;
     private final Supplier<String> stockIdSupplier;
-    public SearchComponet(Supplier<String> stockIdSupplier) {
+    private final Consumer<Task<?extends Object>> taskUiAction;
+    public SearchComponet(Supplier<String> stockIdSupplier,Consumer<Task<?extends Object>> taskUiAction) {
         this.vm=null;
         this.stockIdSupplier = stockIdSupplier;
+        this.taskUiAction=taskUiAction;
         otherInit();
         
     }
 
-    public SearchComponet(SearchComponetVM vm,Supplier<String> stockIdSupplier) {
+    public SearchComponet(SearchComponetVM vm,Supplier<String> stockIdSupplier,Consumer<Task<?extends Object>> taskUiAction) {
         this.vm = vm;
         this.stockIdSupplier = stockIdSupplier;
+        this.taskUiAction=taskUiAction;
         otherInit();
         
     }
@@ -57,10 +61,11 @@ public class SearchComponet extends Button{
             @Override
             public void handle(ActionEvent t) {
                 //委託給ViewModel
-                vm.search(stockIdSupplier.get());
+                Task<List<StockDayInfo>> task = vm.search(stockIdSupplier.get());
+                taskUiAction.accept(task);
+                //改變場景成顯示K線
             }
         });
     }
-    
     
 }
