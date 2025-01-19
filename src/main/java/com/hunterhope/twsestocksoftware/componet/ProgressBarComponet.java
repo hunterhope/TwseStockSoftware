@@ -4,6 +4,8 @@
  */
 package com.hunterhope.twsestocksoftware.componet;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -21,6 +23,7 @@ public class ProgressBarComponet extends HBox {
     public ProgressBarComponet(Task<?> task) {
         myLayout();
         bindData(task);
+        hendleEvent();
     }
 
     private void myLayout() {
@@ -31,6 +34,18 @@ public class ProgressBarComponet extends HBox {
         visibleProperty().bind(task.runningProperty());
         pb.progressProperty().bind(task.progressProperty());
         msg.textProperty().bind(task.messageProperty());
+    }
+
+    private void hendleEvent() {
+        visibleProperty().addListener(new ChangeListener<Boolean>(){
+            @Override
+            public void changed(ObservableValue<? extends Boolean> ov, Boolean olv, Boolean nv) {
+                if(!nv){
+                    //從復節點移除
+                    ((HBox)(ProgressBarComponet.this.getParent())).getChildren().remove(ProgressBarComponet.this);
+                }
+            }
+        });
     }
 
 }

@@ -127,7 +127,7 @@ public class StockIdComponet extends HBox {
                 }
                 //使用警告通知使用者
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("查詢股票發生問題");
+                alert.setTitle("查詢股票ID發生問題");
                 alert.setContentText(t1);
                 alert.setOnCloseRequest(new EventHandler<DialogEvent>(){
                     @Override
