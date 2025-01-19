@@ -82,7 +82,7 @@ public class StockIdComponet extends HBox {
         //設定HBox大小為指定大小 310試出來的大小
         setMaxWidth(270);
         //測試用 看看此元件實際在布局中涵蓋的大小 利用背景色或邊框
-        setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 5; -fx-padding: 10;");
+//        setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 5; -fx-padding: 10;");
     }
 
     private void hendleEvent() {

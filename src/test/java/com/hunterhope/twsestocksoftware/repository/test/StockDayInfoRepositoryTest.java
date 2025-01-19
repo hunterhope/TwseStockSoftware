@@ -90,7 +90,10 @@ public class StockDayInfoRepositoryTest {
         Consumer<String> mockUpdateMsgAction = Mockito.mock(Consumer.class);
         //模擬依賴行為
         Mockito.when(tdqs.selectAllDayInfo(Mockito.any(), Mockito.any())).thenThrow(new TwseDbQueryException("沒有資料表")).thenReturn(List.of(new StockDayInfo()));
-        Mockito.doNothing().when(mockUpdateMsgAction).accept(Mockito.any());
+        Mockito.doAnswer((msg) -> {
+            System.out.println(msg);
+            return null;
+        }).when(mockUpdateMsgAction).accept(Mockito.any());
         //帶測物件
         StockDayInfoRepository sdir = new StockDayInfoRepository(tdqs, tdss);
         //跑起來

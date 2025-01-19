@@ -4,11 +4,14 @@
  */
 package com.hunterhope.twsestocksoftware.componet;
 
+import com.hunterhope.twsestocksoftware.App;
+import com.hunterhope.twsestocksoftware.SceneType;
 import com.hunterhope.twsestocksoftware.data.StockDayInfo;
+import com.hunterhope.twsestocksoftware.viewModel.SearchComponetVM_impl;
 import java.util.List;
+import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -31,8 +34,8 @@ public class SearchComponet extends Button{
     private final SearchComponetVM vm;
     private final Supplier<String> stockIdSupplier;
     private final Consumer<Task<?extends Object>> taskUiAction;
-    public SearchComponet(Supplier<String> stockIdSupplier,Consumer<Task<?extends Object>> taskUiAction) {
-        this.vm=null;
+    public SearchComponet(Supplier<String> stockIdSupplier,Consumer<Task<?extends Object>> taskUiAction,Executor executor) {
+        this.vm=new SearchComponetVM_impl(executor);
         this.stockIdSupplier = stockIdSupplier;
         this.taskUiAction=taskUiAction;
         otherInit();
@@ -64,6 +67,7 @@ public class SearchComponet extends Button{
                 Task<List<StockDayInfo>> task = vm.search(stockIdSupplier.get());
                 taskUiAction.accept(task);
                 //改變場景成顯示K線
+                App.changeScene(SceneType.IndividualStockK);
             }
         });
     }
