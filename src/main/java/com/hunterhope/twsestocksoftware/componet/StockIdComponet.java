@@ -8,18 +8,14 @@ import com.hunterhope.twsestocksoftware.viewModel.StockIdComponetVM_impl;
 import java.util.List;
 import java.util.concurrent.Executor;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.beans.value.WeakChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DialogEvent;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -37,20 +33,14 @@ public class StockIdComponet extends HBox {
         public ObjectProperty<ObservableList<String>> suggestionsProperty();
 
         public String parceInputStockId(String inputStockId);
-        
-        public StringProperty errorMsgProperty();
-
-        public void errorMsgClear();
-
     }
 
     private final ComboBox<String> stockIdComb = new ComboBox<>();;
     private final StockIdComponetVM vm;
-
     public StockIdComponet(Executor executor) {
         vm = new StockIdComponetVM_impl(executor);
         otherInit();
-
+        
     }
     /**
      * 測試程式邏輯使用,或當你想共用ViewModel時可以使用
@@ -66,6 +56,7 @@ public class StockIdComponet extends HBox {
         bindData();
         //事件處裡(事件處理要在資料綁定後面,不然若事件處理是利用監聽器,會造成綁定到錯誤的屬性上)
         hendleEvent();
+        
     }
     private void myLayout() {
         //建立控制項
@@ -119,25 +110,7 @@ public class StockIdComponet extends HBox {
                 }
             }
         });
-        vm.errorMsgProperty().addListener(new ChangeListener<String>(){
-            @Override
-            public void changed(ObservableValue<? extends String> ov, String t, String t1) {
-                if(t1.isBlank()){
-                    return;
-                }
-                //使用警告通知使用者
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("查詢股票ID發生問題");
-                alert.setContentText(t1);
-                alert.setOnCloseRequest(new EventHandler<DialogEvent>(){
-                    @Override
-                    public void handle(DialogEvent t) {
-                        vm.errorMsgClear();
-                    }
-                });
-                alert.show();
-            }
-        });
+        
     }
 
     private void bindData() {

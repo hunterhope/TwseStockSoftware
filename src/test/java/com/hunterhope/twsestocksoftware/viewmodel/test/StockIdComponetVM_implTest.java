@@ -42,7 +42,6 @@ public class StockIdComponetVM_implTest extends InitJavaFxThread{
         StockIdComponetVM vm = new StockIdComponetVM_impl(executorService, tsis);
         //讓viewModel屬性有被綁定呼叫過
         vm.suggestionsProperty();
-        vm.errorMsgProperty();
         //跑起來
         Task<List<String>> task = vm.querySuggestions("測試ID");
         //等待任務執行完畢
@@ -64,10 +63,9 @@ public class StockIdComponetVM_implTest extends InitJavaFxThread{
         //模擬依賴
         Mockito.when(tsis.suggestStockId(Mockito.any())).thenThrow(new TwseStockIdException(new RuntimeException("查詢發生例外")));
         //建立代測物件
-        StockIdComponetVM vm = new StockIdComponetVM_impl(executorService, tsis);
+        StockIdComponetVM_impl vm = new StockIdComponetVM_impl(executorService, tsis);
         //讓viewModel屬性有被綁定呼叫過
         vm.suggestionsProperty();
-        vm.errorMsgProperty();
         //跑起來
         Task<List<String>> task = vm.querySuggestions("測試ID");
         //等待任務執行完畢
@@ -94,7 +92,6 @@ public class StockIdComponetVM_implTest extends InitJavaFxThread{
         StockIdComponetVM vm = new StockIdComponetVM_impl(executorService, tsis);
         //讓viewModel屬性有被綁定呼叫過
         vm.suggestionsProperty();
-        vm.errorMsgProperty();
         //跑起來
         Task<List<String>> task = vm.querySuggestions(" ");
         //等待任務執行完畢
@@ -117,7 +114,6 @@ public class StockIdComponetVM_implTest extends InitJavaFxThread{
         StockIdComponetVM vm = new StockIdComponetVM_impl(executorService, tsis);
         //讓viewModel屬性有被綁定呼叫過
         vm.suggestionsProperty();
-        vm.errorMsgProperty();
         //讓viewModel有值
         Task<List<String>> task = vm.querySuggestions("2");
         //等待任務執行完畢
@@ -140,7 +136,6 @@ public class StockIdComponetVM_implTest extends InitJavaFxThread{
         StockIdComponetVM vm = new StockIdComponetVM_impl(executorService, tsis);
         //讓viewModel屬性有被綁定呼叫過
         vm.suggestionsProperty();
-        vm.errorMsgProperty();
         //讓viewModel有值
         Task<List<String>> task = vm.querySuggestions("2");
         //等待任務執行完畢
@@ -162,7 +157,6 @@ public class StockIdComponetVM_implTest extends InitJavaFxThread{
         StockIdComponetVM vm = new StockIdComponetVM_impl(executorService, tsis);
         //讓viewModel屬性有被綁定呼叫過
         vm.suggestionsProperty();
-        vm.errorMsgProperty();
         //讓viewModel有值
         Task<List<String>> task = vm.querySuggestions("2");
         //等待任務執行完畢
@@ -184,7 +178,6 @@ public class StockIdComponetVM_implTest extends InitJavaFxThread{
         StockIdComponetVM vm = new StockIdComponetVM_impl(executorService, tsis);
         //讓viewModel屬性有被綁定呼叫過
         vm.suggestionsProperty();
-        vm.errorMsgProperty();
         //讓viewModel有值
         Task<List<String>> task = vm.querySuggestions("中鋼");
         //等待任務執行完畢
@@ -206,7 +199,6 @@ public class StockIdComponetVM_implTest extends InitJavaFxThread{
         StockIdComponetVM vm = new StockIdComponetVM_impl(executorService, tsis);
         //讓viewModel屬性有被綁定呼叫過
         vm.suggestionsProperty();
-        vm.errorMsgProperty();
         //跑起來
         String result = vm.parceInputStockId("2002");
         //驗證

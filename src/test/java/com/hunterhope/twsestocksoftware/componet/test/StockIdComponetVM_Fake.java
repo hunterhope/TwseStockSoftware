@@ -5,6 +5,7 @@
 package com.hunterhope.twsestocksoftware.componet.test;
 
 import com.hunterhope.twsestocksoftware.componet.StockIdComponet;
+import com.hunterhope.twsestocksoftware.viewModel.HasErrorMsgVM;
 import java.util.List;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -18,10 +19,13 @@ import javafx.concurrent.Task;
  *
  * @author user
  */
-public class StockIdComponetVM_Fake implements StockIdComponet.StockIdComponetVM {
+public class StockIdComponetVM_Fake extends HasErrorMsgVM implements StockIdComponet.StockIdComponetVM {
 
     private ObjectProperty<ObservableList<String>> suggestions;
-    private StringProperty errorMsg;
+
+    public StockIdComponetVM_Fake() {
+        super("假的查詢股票ID發生錯誤");
+    }
 
     @Override
     public Task<List<String>> querySuggestions(String inputWord) {
@@ -63,18 +67,4 @@ public class StockIdComponetVM_Fake implements StockIdComponet.StockIdComponetVM
     public String parceInputStockId(String inputStockId) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-    @Override
-    public StringProperty errorMsgProperty() {
-        if (errorMsg == null) {
-            errorMsg = new SimpleStringProperty();
-        }
-        return errorMsg;
-    }
-
-    @Override
-    public void errorMsgClear() {
-        errorMsg.setValue("");
-    }
-
 }

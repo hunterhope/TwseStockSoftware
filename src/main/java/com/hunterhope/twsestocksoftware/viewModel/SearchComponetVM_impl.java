@@ -25,11 +25,13 @@ public class SearchComponetVM_impl extends HasErrorMsgVM implements SearchCompon
     private final Executor executor;
     
     public SearchComponetVM_impl(Executor executor) {
+        super("查詢股票日交易紀錄發生錯誤");
         sdir = new StockDayInfoRepository();
         this.executor=executor;
     }
 
     public SearchComponetVM_impl(StockDayInfoRepository sdir,Executor executor) {
+        super("查詢股票日交易紀錄發生錯誤");
         this.sdir = sdir;
         this.executor=executor;
     }

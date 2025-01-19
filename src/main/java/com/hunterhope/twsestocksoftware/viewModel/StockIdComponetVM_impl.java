@@ -28,11 +28,13 @@ public class StockIdComponetVM_impl extends HasErrorMsgVM implements StockIdComp
     private final TwseStockIdService tsis;
 
     public StockIdComponetVM_impl(Executor executor) {
+        super("查詢股票ID發生錯誤");
         this.executor = executor;
         tsis = new TwseStockIdService();
     }
 
     public StockIdComponetVM_impl(Executor executor, TwseStockIdService tsis) {
+        super("查詢股票ID發生錯誤");
         this.executor = executor;
         this.tsis = tsis;
     }

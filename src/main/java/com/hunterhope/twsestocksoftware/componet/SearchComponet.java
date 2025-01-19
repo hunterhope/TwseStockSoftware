@@ -24,7 +24,7 @@ import javafx.scene.control.Button;
  */
 public class SearchComponet extends Button{
 
-    public interface SearchComponetVM{
+    public interface SearchComponetVM {
         public Task<List<StockDayInfo>> search(String stocdId);
 
         public ListProperty<StockDayInfo> stockDaysInfoProperty();
