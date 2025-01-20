@@ -1,6 +1,7 @@
 package com.hunterhope.twsestocksoftware;
 
 import static com.hunterhope.twsestocksoftware.SceneType.Test;
+import com.hunterhope.twsestocksoftware.ioc.IocContainer;
 import com.hunterhope.twsestocksoftware.scene.SceneBasicFormBorder;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,9 +17,8 @@ import javafx.stage.Stage;
  */
 public class App extends Application {
 
-    private static final ExecutorService es = Executors.newFixedThreadPool(1);
     private static Stage mainStage;
-
+    private static IocContainer ioc = new IocContainer();
     @Override
     public void start(Stage stage) {
         mainStage = stage;
@@ -29,7 +29,7 @@ public class App extends Application {
 
     @Override
     public void stop() throws Exception {
-        es.shutdownNow();
+        ioc.releaseResource();
     }
 
     public static void changeScene(SceneType sceneType) {
@@ -37,7 +37,7 @@ public class App extends Application {
         switch (sceneType) {
             case Test:
             default:
-                root = new SceneBasicFormBorder(es);
+                root = new SceneBasicFormBorder(ioc.createStockIdComponetVM(),ioc.getSearchComponetVM());
                 break;
         }
         Scene scene = new Scene(root);
