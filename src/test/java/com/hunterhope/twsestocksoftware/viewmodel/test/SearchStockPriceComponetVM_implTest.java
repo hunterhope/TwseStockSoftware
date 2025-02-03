@@ -4,11 +4,10 @@
  */
 package com.hunterhope.twsestocksoftware.viewmodel.test;
 
-import com.hunterhope.twsestocksoftware.componet.SearchComponet.SearchComponetVM;
 import com.hunterhope.twsestocksoftware.data.StockDayInfo;
 import com.hunterhope.twsestocksoftware.repository.StockDayInfoRepository;
 import com.hunterhope.twsestocksoftware.utility.ThreadWait;
-import com.hunterhope.twsestocksoftware.viewModel.SearchComponetVM_impl;
+import com.hunterhope.twsestocksoftware.viewModel.SearchStockPriceComponetVM_impl;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,7 +20,7 @@ import org.testfx.framework.junit5.Stop;
  *
  * @author user
  */
-public class SearchComponetVM_implTest extends InitJavaFxThread{
+public class SearchStockPriceComponetVM_implTest extends InitJavaFxThread{
     private ExecutorService es = Executors.newFixedThreadPool(1);
     @Test
     public void testSearch_DB_has_data()throws Exception{
@@ -29,12 +28,12 @@ public class SearchComponetVM_implTest extends InitJavaFxThread{
         StockDayInfoRepository sdir = Mockito.mock(StockDayInfoRepository.class);
         Mockito.when(sdir.queryAllDayInfo(Mockito.any(),Mockito.any())).thenReturn(List.of(new StockDayInfo()));
         //測試物件
-        SearchComponetVM vm = new SearchComponetVM_impl(sdir,es);
+        SearchStockPriceComponetVM_impl vm = new SearchStockPriceComponetVM_impl(sdir,es);
         //跑起來
         vm.search("2323").get();
         ThreadWait.waitforPropertyContentChange();
         //驗證屬性有值
-        Assertions.assertFalse(vm.stockDaysInfoProperty().getValue().isEmpty(),"沒有股票交易紀錄");
+        Assertions.assertFalse(vm.getStockDaysInfo().isEmpty(),"沒有股票交易紀錄");
     }
     @Stop
     public void stopTest() {

@@ -7,12 +7,11 @@ package com.hunterhope.twsestocksoftware.componet;
 import com.hunterhope.twsestocksoftware.App;
 import com.hunterhope.twsestocksoftware.SceneType;
 import com.hunterhope.twsestocksoftware.data.StockDayInfo;
-import com.hunterhope.twsestocksoftware.viewModel.SearchComponetVM_impl;
+import com.hunterhope.twsestocksoftware.viewModel.SearchStockPriceComponetVM_impl;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import javafx.beans.property.ListProperty;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -22,27 +21,24 @@ import javafx.scene.control.Button;
  *
  * @author user
  */
-public class SearchComponet extends Button{
+public class SearchStockPriceComponet extends Button{
 
-    public interface SearchComponetVM {
+    public interface SearchStockPriceComponetVM {
         public Task<List<StockDayInfo>> search(String stocdId);
-
-        public ListProperty<StockDayInfo> stockDaysInfoProperty();
-
     }
     
-    private final SearchComponetVM vm;
+    private final SearchStockPriceComponetVM vm;
     private final Supplier<String> stockIdSupplier;
     private final Consumer<Task<?extends Object>> taskUiAction;
-    public SearchComponet(Supplier<String> stockIdSupplier,Consumer<Task<?extends Object>> taskUiAction,Executor executor) {
-        this.vm=new SearchComponetVM_impl(executor);
+    public SearchStockPriceComponet(Supplier<String> stockIdSupplier,Consumer<Task<?extends Object>> taskUiAction,Executor executor) {
+        this.vm=new SearchStockPriceComponetVM_impl(executor);
         this.stockIdSupplier = stockIdSupplier;
         this.taskUiAction=taskUiAction;
         otherInit();
         
     }
 
-    public SearchComponet(SearchComponetVM vm,Supplier<String> stockIdSupplier,Consumer<Task<?extends Object>> taskUiAction) {
+    public SearchStockPriceComponet(SearchStockPriceComponetVM vm,Supplier<String> stockIdSupplier,Consumer<Task<?extends Object>> taskUiAction) {
         this.vm = vm;
         this.stockIdSupplier = stockIdSupplier;
         this.taskUiAction=taskUiAction;

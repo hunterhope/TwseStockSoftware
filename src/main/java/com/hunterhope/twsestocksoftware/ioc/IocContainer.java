@@ -4,9 +4,9 @@
  */
 package com.hunterhope.twsestocksoftware.ioc;
 
-import com.hunterhope.twsestocksoftware.componet.SearchComponet.SearchComponetVM;
+import com.hunterhope.twsestocksoftware.componet.SearchStockPriceComponet.SearchStockPriceComponetVM;
 import com.hunterhope.twsestocksoftware.componet.StockIdComponet.StockIdComponetVM;
-import com.hunterhope.twsestocksoftware.viewModel.SearchComponetVM_impl;
+import com.hunterhope.twsestocksoftware.viewModel.SearchStockPriceComponetVM_impl;
 import com.hunterhope.twsestocksoftware.viewModel.StockIdComponetVM_impl;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
  */
 public class IocContainer {
     private final ExecutorService es;
-    private SearchComponetVM scvm;
+    private SearchStockPriceComponetVM scvm;
     public IocContainer() {
         es = Executors.newFixedThreadPool(3);
     }
@@ -37,9 +37,9 @@ public class IocContainer {
         return new StockIdComponetVM_impl(es);
     }
     
-    public SearchComponetVM getSearchComponetVM(){
+    public SearchStockPriceComponetVM getSearchComponetVM(){
         if(scvm==null){
-            scvm = new SearchComponetVM_impl(es);
+            scvm = new SearchStockPriceComponetVM_impl(es);
         }
         return scvm;
     }

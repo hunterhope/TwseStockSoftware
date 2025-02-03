@@ -5,8 +5,8 @@
 package com.hunterhope.twsestocksoftware.scene;
 
 import com.hunterhope.twsestocksoftware.componet.ProgressBarComponet;
-import com.hunterhope.twsestocksoftware.componet.SearchComponet;
-import com.hunterhope.twsestocksoftware.componet.SearchComponet.SearchComponetVM;
+import com.hunterhope.twsestocksoftware.componet.SearchStockPriceComponet;
+import com.hunterhope.twsestocksoftware.componet.SearchStockPriceComponet.SearchStockPriceComponetVM;
 import com.hunterhope.twsestocksoftware.componet.StockIdComponet;
 import com.hunterhope.twsestocksoftware.componet.StockIdComponet.StockIdComponetVM;
 import javafx.concurrent.Task;
@@ -24,7 +24,7 @@ import javafx.scene.text.Text;
 public class SceneBasicFormBorder extends BorderPane {
 
     private final StockIdComponet stockIdComponet;
-    private final SearchComponet searchComponet;
+    private final SearchStockPriceComponet searchComponet;
     private final ToolBar toolbar = new ToolBar();
     private static final HBox statusbar;
 
@@ -34,11 +34,11 @@ public class SceneBasicFormBorder extends BorderPane {
         statusbar.getChildren().addAll(new Text("狀態列"), new Separator(Orientation.VERTICAL));
     }
 
-    public SceneBasicFormBorder(StockIdComponetVM vm,SearchComponetVM scvm) {
+    public SceneBasicFormBorder(StockIdComponetVM vm,SearchStockPriceComponetVM scvm) {
 
         //設定每個使用這格式的基本元件
         stockIdComponet = new StockIdComponet(vm);
-        searchComponet = new SearchComponet(scvm,
+        searchComponet = new SearchStockPriceComponet(scvm,
                 stockIdComponet::getInputStockId,
                 this::taskProgressView);
         //上方有查詢股票元件
