@@ -11,7 +11,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,7 +29,7 @@ public class StockIdComponetVM_impl extends HasErrorMsgVM implements StockIdComp
     private ObjectProperty<ObservableList<String>> suggestions;
     private final Executor executor;
     private final TwseStockIdService tsis;
-
+    private BooleanProperty disableSearchProperty;
     public StockIdComponetVM_impl(Executor executor) {
         super("查詢股票ID發生錯誤");
         this.executor = executor;
@@ -42,7 +45,7 @@ public class StockIdComponetVM_impl extends HasErrorMsgVM implements StockIdComp
     @Override
     public Task<List<String>> querySuggestions(String inputWord) {
         //產生執行緒任務,此任務不需要回報任何進度
-        Task<List<String>> task  = new HasErrorHandelTask<List<String>>(this::notifyErrorMsg) {
+        Task<List<String>> suggestionQueryTask  = new HasErrorHandelTask<List<String>>(this::notifyErrorMsg) {
             @Override
             protected List<String> call() throws Exception {
                 //確認使用者輸入不是空白字串
@@ -62,8 +65,30 @@ public class StockIdComponetVM_impl extends HasErrorMsgVM implements StockIdComp
         };
 
         //執行任務
-        executor.execute(task);
-        return task;
+        executor.execute(suggestionQueryTask);
+        //啟動另一個執行續等待剛任務結束,並檢查是否可以查詢該股票
+        executor.execute(new Task<Boolean>() {
+            @Override
+            protected Boolean call() throws Exception {
+                List<String> result = suggestionQueryTask.get();
+                return !findCorrectItems(inputWord, result).isPresent();
+            }
+
+            @Override
+            protected void succeeded() {
+                disableSearchProperty.set(getValue());
+            }
+
+            @Override
+            protected void failed() {
+                super.failed(); 
+                getException().printStackTrace();
+            }
+            
+            
+        });
+        
+        return suggestionQueryTask;
     }
 
     @Override
@@ -78,12 +103,10 @@ public class StockIdComponetVM_impl extends HasErrorMsgVM implements StockIdComp
 
     @Override
     public String parceInputStockId(String inputStockId) {
-        List<String> suggestionsData = ensureSuggestionsHasData(inputStockId);
-        Optional<String> opt = findCorrectItems(inputStockId,suggestionsData);
+        Optional<String> opt = findCorrectItems(inputStockId,suggestions.getValue());
         if (opt.isPresent()) {
             return opt.get().split(" ")[0];
         }
-        errorMsg.setValue("股票代號不明確或上市無此股票: " + inputStockId);
         return inputStockId;
     }
 
@@ -103,14 +126,16 @@ public class StockIdComponetVM_impl extends HasErrorMsgVM implements StockIdComp
                 .findFirst();
     }
 
-    private List<String> ensureSuggestionsHasData(String inputStockId) {
-        if (suggestions.getValue().isEmpty() || suggestions.getValue().contains("請輸入查詢股票")) {
-            Task<List<String>> task = querySuggestions(inputStockId);
-            try {
-                return task.get();//等待結果完成
-            } catch (InterruptedException | ExecutionException ex) {
-            }
+    @Override
+    public ReadOnlyBooleanProperty disableSearchProperty() {
+        if(disableSearchProperty==null){
+            disableSearchProperty=new SimpleBooleanProperty(true);
         }
-        return suggestions.get();
+        return disableSearchProperty;
+    }
+
+    @Override
+    public void enableSearchBtn() {
+        disableSearchProperty.set(false);
     }
 }

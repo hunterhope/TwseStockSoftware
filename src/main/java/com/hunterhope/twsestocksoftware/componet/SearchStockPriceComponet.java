@@ -48,6 +48,7 @@ public class SearchStockPriceComponet extends Button{
 
     private void myLayout() {
         setText("查詢");
+        setDisable(true);
     }
 
     private void otherInit(){

@@ -7,7 +7,9 @@ package com.hunterhope.twsestocksoftware.componet;
 import com.hunterhope.twsestocksoftware.viewModel.StockIdComponetVM_impl;
 import java.util.List;
 import java.util.concurrent.Executor;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
@@ -33,6 +35,9 @@ public class StockIdComponet extends HBox {
         public ObjectProperty<ObservableList<String>> suggestionsProperty();
 
         public String parceInputStockId(String inputStockId);
+        
+        public ReadOnlyBooleanProperty disableSearchProperty();
+        public void enableSearchBtn();
     }
 
     private final ComboBox<String> stockIdComb = new ComboBox<>();;
@@ -84,6 +89,8 @@ public class StockIdComponet extends HBox {
                 //假如輸入的字串不是空字串在發出查詢
                 if (stockIdComb.getSelectionModel().isEmpty()) {//空字串邏輯給vm判斷
                     vm.querySuggestions(ns);
+                }else{
+                    vm.enableSearchBtn();
                 }
             }
         });

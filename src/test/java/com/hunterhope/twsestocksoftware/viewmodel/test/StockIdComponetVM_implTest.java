@@ -77,7 +77,7 @@ public class StockIdComponetVM_implTest extends InitJavaFxThread{
             Mockito.verify(tsis, Mockito.times(1)).suggestStockId(Mockito.any());
             ThreadWait.waitforPropertyContentChange();
             //驗證vm的錯誤訊息
-            Assertions.assertTrue(vm.errorMsgProperty().getValue().equals("查詢發生例外"), "例外訊息不對");
+            Assertions.assertTrue(vm.errorMsgProperty().getValue().equals("查詢發生例外"), "例外訊息不對:"+vm.errorMsgProperty().getValue());
         }
 
     }
@@ -203,8 +203,6 @@ public class StockIdComponetVM_implTest extends InitJavaFxThread{
         String result = vm.parceInputStockId("2002");
         //驗證
         Assertions.assertTrue(result.equals("2002"),"結果要'2002'但不對: "+result);
-        //驗證tsis只呼叫一次
-         Mockito.verify(tsis, Mockito.times(1)).suggestStockId(Mockito.any());
         
     }
     @Stop

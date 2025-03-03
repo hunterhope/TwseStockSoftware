@@ -35,12 +35,12 @@ public class SceneBasicFormBorder extends BorderPane {
     }
 
     public SceneBasicFormBorder(StockIdComponetVM vm,SearchStockPriceComponetVM scvm) {
-
         //設定每個使用這格式的基本元件
         stockIdComponet = new StockIdComponet(vm);
         searchComponet = new SearchStockPriceComponet(scvm,
                 stockIdComponet::getInputStockId,
                 this::taskProgressView);
+        searchComponet.disableProperty().bind(vm.disableSearchProperty());
         //上方有查詢股票元件
         toolbar.getItems().addAll(stockIdComponet, searchComponet, new Separator());
         setTop(toolbar);

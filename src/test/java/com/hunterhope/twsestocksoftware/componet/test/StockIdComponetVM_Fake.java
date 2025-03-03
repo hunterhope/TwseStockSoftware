@@ -8,6 +8,7 @@ import com.hunterhope.twsestocksoftware.componet.StockIdComponet;
 import com.hunterhope.twsestocksoftware.viewModel.HasErrorMsgVM;
 import java.util.List;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -66,5 +67,15 @@ public class StockIdComponetVM_Fake extends HasErrorMsgVM implements StockIdComp
     @Override
     public String parceInputStockId(String inputStockId) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public ReadOnlyBooleanProperty disableSearchProperty() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void enableSearchBtn() {
+        
     }
 }
