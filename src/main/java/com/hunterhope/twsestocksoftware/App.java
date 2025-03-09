@@ -2,6 +2,7 @@ package com.hunterhope.twsestocksoftware;
 
 import static com.hunterhope.twsestocksoftware.SceneType.Test;
 import com.hunterhope.twsestocksoftware.ioc.IocContainer;
+import com.hunterhope.twsestocksoftware.scene.PreferStocksScene;
 import com.hunterhope.twsestocksoftware.scene.SceneBasicFormBorder;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,7 +23,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
         mainStage = stage;
-        changeScene(SceneType.Test);
+        changeScene(SceneType.PreferStockList);
         mainStage.setMaximized(true);
         mainStage.show();
     }
@@ -35,6 +36,9 @@ public class App extends Application {
     public static void changeScene(SceneType sceneType) {
         SceneBasicFormBorder root = null;
         switch (sceneType) {
+            case PreferStockList:
+                root = new PreferStocksScene(ioc.createStockIdComponetVM(),ioc.getSearchComponetVM());
+                break;
             case Test:
             default:
                 root = new SceneBasicFormBorder(ioc.createStockIdComponetVM(),ioc.getSearchComponetVM());

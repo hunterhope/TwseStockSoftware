@@ -9,5 +9,5 @@ package com.hunterhope.twsestocksoftware;
  * @author user
  */
 public enum SceneType {
-    PreferenceStockList,IndividualStockK,Test
+    PreferStockList,IndividualStockK,Test
 }
