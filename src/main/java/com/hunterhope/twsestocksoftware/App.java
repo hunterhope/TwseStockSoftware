@@ -4,6 +4,7 @@ import static com.hunterhope.twsestocksoftware.SceneType.Test;
 import com.hunterhope.twsestocksoftware.ioc.IocContainer;
 import com.hunterhope.twsestocksoftware.scene.PreferStocksScene;
 import com.hunterhope.twsestocksoftware.scene.SceneBasicFormBorder;
+import com.hunterhope.twsestocksoftware.viewModel.PreferStocksSceneVM_impl;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javafx.application.Application;
@@ -37,7 +38,7 @@ public class App extends Application {
         SceneBasicFormBorder root = null;
         switch (sceneType) {
             case PreferStockList:
-                root = new PreferStocksScene(ioc.createStockIdComponetVM(),ioc.getSearchComponetVM());
+                root = new PreferStocksScene(ioc.createStockIdComponetVM(),ioc.getSearchComponetVM(),new PreferStocksSceneVM_impl());
                 break;
             case Test:
             default:
@@ -57,8 +58,11 @@ public class App extends Application {
         }
     }
 
+    public static IocContainer getIocContainer(){
+        return ioc;
+    }
     public static void main(String[] args) {
         launch();
     }
-
+    
 }
