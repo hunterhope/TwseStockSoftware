@@ -23,16 +23,17 @@ import javafx.scene.text.Text;
 public class StockBriefInfo {
 
     private String id;
-    private String name;
+    private String name="";
     private String date;
     private String close;
     private String price_dif;
     private int concernedTime;
+    private final StringProperty fullNameProperty=new SimpleStringProperty();
     private final StringProperty dateProperty = new SimpleStringProperty();
     private final StringProperty priceProperty = new SimpleStringProperty();
     private final ObjectProperty<Paint> colorProperty = new SimpleObjectProperty<>();
     private final BooleanProperty updateProperty = new SimpleBooleanProperty(true);
-    
+
     public String getId() {
         return id;
     }
@@ -82,7 +83,7 @@ public class StockBriefInfo {
     }
 
     private int upDownEq() {
-        return price_dif.contains("+") ? 0 : price_dif.contains("-") ? 1 : 2;
+        return price_dif==null?-1:price_dif.contains("+") ? 0 : price_dif.contains("-") ? 1 : 2;
     }
 
     public Text priceText() {
@@ -92,7 +93,8 @@ public class StockBriefInfo {
         priceText.fillProperty().bind(colorProperty);
         return priceText;
     }
-    private void updatePricePropertyHelper(){
+
+    private void updatePricePropertyHelper() {
         switch (upDownEq()) {
             case 0:
                 priceProperty.set(close + " ▲ " + price_dif);
@@ -102,43 +104,57 @@ public class StockBriefInfo {
                 priceProperty.set(close + " ▼ " + price_dif);
                 colorProperty.set(Color.GREEN);
                 break;
-            default:
+            case 2:
                 priceProperty.set(close + "   " + price_dif);
                 colorProperty.set(Color.BLACK);
                 break;
+            default:
+                break;
         }
     }
-    public void updatePriceProperty(String close,String price_dif){
-        this.close= close;
+
+    public void updatePriceProperty(String close, String price_dif) {
+        this.close = close;
         this.price_dif = price_dif;
         updatePricePropertyHelper();
     }
-    public Text fullNameText() {
-        return new Text(id + " " + name);
-    }
 
+    public Text fullNameText() {
+        Text fullNametext = new Text();
+        fullNameProperty.set(id+" "+name);
+        fullNametext.textProperty().bind(fullNameProperty);
+        return fullNametext;
+    }
+    public void updateFullNameProperty(String name){
+        this.name = name;
+        fullNameProperty.set(id+" "+name);
+    }
     public Text conceredTimeText() {
         return new Text("👓 " + concernedTime);
     }
-    
-    public Text dateText(){
+
+    public Text dateText() {
         Text dateText = new Text();
         dateProperty.set(date);
         dateText.textProperty().bind(dateProperty);
         return dateText;
     }
-    public void updateDateProperty(String date){
-        this.date=date;
+
+    public void updateDateProperty(String date) {
+        this.date = date;
         dateProperty.set(date);
     }
-    public void updateUpdateProperty(boolean update){
+
+    public void updateUpdateProperty(boolean update) {
         updateProperty.set(update);
     }
-    public ProgressBar updateProgressBar(){
+
+    public ProgressBar updateProgressBar() {
         ProgressBar pb = new ProgressBar();
         pb.visibleProperty().bind(updateProperty);
         return pb;
     }
+
     @Override
     public int hashCode() {
         int hash = 7;

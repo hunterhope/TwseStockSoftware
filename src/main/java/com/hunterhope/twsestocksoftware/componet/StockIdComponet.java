@@ -131,5 +131,5 @@ public class StockIdComponet extends HBox {
     public String getInputStockId(){
         return vm.parceInputStockId(stockIdComb.getValue());
     }
-
+    
 }
