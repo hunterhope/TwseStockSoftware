@@ -9,20 +9,15 @@ import com.hunterhope.twsestocksoftware.componet.SearchStockPriceComponet.Search
 import com.hunterhope.twsestocksoftware.componet.StockBriefInfoCardComponet;
 import com.hunterhope.twsestocksoftware.componet.StockIdComponet.StockIdComponetVM;
 import com.hunterhope.twsestocksoftware.data.StockBriefInfo;
-import java.util.List;
-import java.util.Optional;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.TilePane;
 
@@ -34,6 +29,7 @@ public class PreferStocksScene extends SceneBasicFormBorder {
 
     public interface PreferStocksSceneVM {
         ListProperty<StockBriefInfo> preferStocksDataProperty();
+        void addNewPreferStock(String stockId);
     }
 
     private final ListProperty<StockBriefInfo> preferData = new SimpleListProperty<>();
@@ -93,7 +89,7 @@ public class PreferStocksScene extends SceneBasicFormBorder {
     }
     private void addNewPreferStock(MouseEvent mouseEvent){
         new AddNewPreferStockDialog((stockId) -> {
-            System.out.println("新增偏好個股:"+stockId);
+            pssvm.addNewPreferStock(stockId);
         } ).showAndWait();
     }
     

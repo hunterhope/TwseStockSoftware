@@ -18,7 +18,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Text;
 
 /**
  *
@@ -38,11 +37,7 @@ public class StockBriefInfoCardComponet extends HBox {
     }
 
     public StockBriefInfoCardComponet(StockBriefInfo info) {
-        HBox stockName = new HBox(info.getFullNameText());
-        HBox stockDay = new HBox(new Text(info.getDate()));
-        HBox stockPrice = new HBox(info.getPriceText());
-        HBox stockConcernedTime = new HBox(info.getConceredTimeText());
-        VBox vBox = new VBox(stockName, stockDay, stockPrice, stockConcernedTime);
+        VBox vBox = new VBox(info.fullNameText(), info.dateText(), info.priceText(), info.conceredTimeText(),info.updateProgressBar());
         vBox.setPadding(insets8);
         vBox.setSpacing(8);
         getChildren().add(vBox);
