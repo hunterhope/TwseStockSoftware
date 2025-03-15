@@ -28,7 +28,6 @@ public class StockBriefInfo {
     private String close;
     private String price_dif;
     private int concernedTime;
-    private final StringProperty fullNameProperty=new SimpleStringProperty();
     private final StringProperty dateProperty = new SimpleStringProperty();
     private final StringProperty priceProperty = new SimpleStringProperty();
     private final ObjectProperty<Paint> colorProperty = new SimpleObjectProperty<>();
@@ -120,15 +119,10 @@ public class StockBriefInfo {
     }
 
     public Text fullNameText() {
-        Text fullNametext = new Text();
-        fullNameProperty.set(id+" "+name);
-        fullNametext.textProperty().bind(fullNameProperty);
+        Text fullNametext = new Text(id+" "+name);
         return fullNametext;
     }
-    public void updateFullNameProperty(String name){
-        this.name = name;
-        fullNameProperty.set(id+" "+name);
-    }
+    
     public Text conceredTimeText() {
         return new Text("👓 " + concernedTime);
     }

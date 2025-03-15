@@ -38,6 +38,8 @@ public class StockIdComponet extends HBox {
         
         public ReadOnlyBooleanProperty disableSearchProperty();
         public void enableSearchBtn();
+
+        public String parceInputStockFullName(String string);
     }
 
     private final ComboBox<String> stockIdComb = new ComboBox<>();;
@@ -130,6 +132,10 @@ public class StockIdComponet extends HBox {
     
     public String getInputStockId(){
         return vm.parceInputStockId(stockIdComb.getValue());
+    }
+    
+    public String getInputStockFullName(){
+        return vm.parceInputStockFullName(stockIdComb.getValue());
     }
     
 }

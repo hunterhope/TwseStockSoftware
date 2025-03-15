@@ -10,18 +10,12 @@ import com.hunterhope.twsestocksoftware.componet.StockIdComponet.StockIdComponet
 import com.hunterhope.twsestocksoftware.utility.ThreadWait;
 import com.hunterhope.twsestocksoftware.viewModel.StockIdComponetVM_impl;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import org.junit.jupiter.api.Assertions;
 import static org.junit.jupiter.api.Assertions.fail;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.testfx.framework.junit5.Stop;
 
 /**
  *
@@ -29,7 +23,6 @@ import org.testfx.framework.junit5.Stop;
  */
 public class StockIdComponetVM_implTest extends InitJavaFxThread{
 
-    private final ExecutorService executorService = Executors.newFixedThreadPool(1);
 
     @Test
     public void test_success_get_net_data() throws Exception {
@@ -205,8 +198,24 @@ public class StockIdComponetVM_implTest extends InitJavaFxThread{
         Assertions.assertTrue(result.equals("2002"),"結果要'2002'但不對: "+result);
         
     }
-    @Stop
-    public void stopTest() {
-        executorService.shutdownNow();
+    @Test
+    public void test_parceInputStockFullName_input_2330() throws Exception{
+        //模擬依賴
+        TwseStockIdService tsis = Mockito.mock(TwseStockIdService.class);
+        //模擬依賴
+        Mockito.when(tsis.suggestStockId(Mockito.any())).thenReturn(List.of("2002 中鋼", "2003 同光", "2004 大鋼", "2005 友力", "2006 東和鋼鐵", "2007 燁興","2330 台積電"));
+        //建立代測物件
+        StockIdComponetVM vm = new StockIdComponetVM_impl(executorService, tsis);
+        //讓viewModel屬性有被綁定呼叫過
+        vm.suggestionsProperty();
+        //讓viewModel有值
+        Task<List<String>> task = vm.querySuggestions("2330");
+        //等待任務執行完畢
+        task.get();
+        ThreadWait.waitforPropertyContentChange();
+        //跑起來
+        String result = vm.parceInputStockFullName("2330");
+        //驗證
+        Assertions.assertTrue(result.equals("2330 台積電"),"結果要'2330 台積電'但不對: "+result);
     }
 }

@@ -78,4 +78,9 @@ public class StockIdComponetVM_Fake extends HasErrorMsgVM implements StockIdComp
     public void enableSearchBtn() {
         
     }
+
+    @Override
+    public String parceInputStockFullName(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

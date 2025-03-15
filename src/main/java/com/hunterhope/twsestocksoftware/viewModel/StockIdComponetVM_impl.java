@@ -9,7 +9,6 @@ import com.hunterhope.twsestocksoftware.componet.StockIdComponet.StockIdComponet
 import com.hunterhope.twsestocksoftware.other.HasErrorHandelTask;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -29,7 +28,7 @@ public class StockIdComponetVM_impl extends HasErrorMsgVM implements StockIdComp
     private ObjectProperty<ObservableList<String>> suggestions;
     private final Executor executor;
     private final TwseStockIdService tsis;
-    private BooleanProperty disableSearchProperty;
+    private BooleanProperty disableSearchProperty=new SimpleBooleanProperty(true);;
     public StockIdComponetVM_impl(Executor executor) {
         super("查詢股票ID發生錯誤");
         this.executor = executor;
@@ -78,14 +77,6 @@ public class StockIdComponetVM_impl extends HasErrorMsgVM implements StockIdComp
             protected void succeeded() {
                 disableSearchProperty.set(getValue());
             }
-
-            @Override
-            protected void failed() {
-                super.failed(); 
-                getException().printStackTrace();
-            }
-            
-            
         });
         
         return suggestionQueryTask;
@@ -110,6 +101,14 @@ public class StockIdComponetVM_impl extends HasErrorMsgVM implements StockIdComp
         return inputStockId;
     }
 
+    @Override
+    public String parceInputStockFullName(String input) {
+        Optional<String> opt = findCorrectItems(input,suggestions.getValue());
+        if (opt.isPresent()) {
+            return opt.get();
+        }
+        return input;
+    }
     private Optional<String> findCorrectItems(String inputStockId,List<String> suggestionsData) {
         //找出正確的選項
         return suggestionsData.stream()
@@ -128,9 +127,6 @@ public class StockIdComponetVM_impl extends HasErrorMsgVM implements StockIdComp
 
     @Override
     public ReadOnlyBooleanProperty disableSearchProperty() {
-        if(disableSearchProperty==null){
-            disableSearchProperty=new SimpleBooleanProperty(true);
-        }
         return disableSearchProperty;
     }
 
@@ -138,4 +134,6 @@ public class StockIdComponetVM_impl extends HasErrorMsgVM implements StockIdComp
     public void enableSearchBtn() {
         disableSearchProperty.set(false);
     }
+
+    
 }

@@ -9,11 +9,13 @@ import com.hunterhope.twsestocksoftware.componet.SearchStockPriceComponet.Search
 import com.hunterhope.twsestocksoftware.componet.StockBriefInfoCardComponet;
 import com.hunterhope.twsestocksoftware.componet.StockIdComponet.StockIdComponetVM;
 import com.hunterhope.twsestocksoftware.data.StockBriefInfo;
+import java.util.Map;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -29,7 +31,7 @@ public class PreferStocksScene extends SceneBasicFormBorder {
 
     public interface PreferStocksSceneVM {
         ListProperty<StockBriefInfo> preferStocksDataProperty();
-        void addNewPreferStock(String stockId);
+        Task<Map<String,String>> addNewPreferStock(String stockId);
     }
 
     private final ListProperty<StockBriefInfo> preferData = new SimpleListProperty<>();

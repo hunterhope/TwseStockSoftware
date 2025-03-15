@@ -6,6 +6,8 @@ package com.hunterhope.twsestocksoftware.ioc;
 
 import com.hunterhope.twsestocksoftware.componet.SearchStockPriceComponet.SearchStockPriceComponetVM;
 import com.hunterhope.twsestocksoftware.componet.StockIdComponet.StockIdComponetVM;
+import com.hunterhope.twsestocksoftware.scene.PreferStocksScene;
+import com.hunterhope.twsestocksoftware.scene.PreferStocksScene.PreferStocksSceneVM;
 import com.hunterhope.twsestocksoftware.viewModel.SearchStockPriceComponetVM_impl;
 import com.hunterhope.twsestocksoftware.viewModel.StockIdComponetVM_impl;
 import java.util.concurrent.Executor;
@@ -43,4 +45,9 @@ public class IocContainer {
         }
         return scvm;
     }
+
+    public PreferStocksSceneVM createPreferStocksScene() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

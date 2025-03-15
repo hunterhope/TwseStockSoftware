@@ -5,24 +5,35 @@
 package com.hunterhope.twsestocksoftware.viewModel;
 
 import com.hunterhope.twsestocksoftware.data.StockBriefInfo;
+import com.hunterhope.twsestocksoftware.other.HasErrorHandelTask;
+import com.hunterhope.twsestocksoftware.repository.PreferStockRepository;
 import com.hunterhope.twsestocksoftware.scene.PreferStocksScene.PreferStocksSceneVM;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Executor;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
+import javafx.concurrent.Task;
 
 /**
  *
  * @author user
  */
-public class PreferStocksSceneVM_impl implements PreferStocksSceneVM {
-    private ListProperty<StockBriefInfo> preferStockDataProperty = new SimpleListProperty<>();
+public class PreferStocksSceneVM_impl extends HasErrorMsgVM implements PreferStocksSceneVM {
+    private final ListProperty<StockBriefInfo> preferStockDataProperty = new SimpleListProperty<>();
+    private final Executor executor;
+    private final PreferStockRepository psr;
+    public PreferStocksSceneVM_impl(Executor executor, PreferStockRepository psr) {
+        super("新增偏好個股錯誤");
+        preferStockDataProperty.set(FXCollections.observableArrayList(createTestData("15.7"), createTestData("15.77777777777")));//測試用
+        this.executor = executor;
+        this.psr = psr;
+    }
     
     @Override
     public ListProperty<StockBriefInfo> preferStocksDataProperty() {
-        Platform.runLater(() -> {
-            preferStockDataProperty.set(FXCollections.observableArrayList(createTestData("15.7"), createTestData("15.77777777777")));
-        });
         new Thread(() -> {
             try {
                 Thread.sleep(5000);
@@ -50,11 +61,43 @@ public class PreferStocksSceneVM_impl implements PreferStocksSceneVM {
     }
 
     @Override
-    public void addNewPreferStock(String stockId) {
-        System.out.println("new stockId="+stockId);
+    public Task<Map<String,String>> addNewPreferStock(String stockFullName) {
+        StockBriefInfo newEmptyCard = createNewEmptyCard(stockFullName);
+        if(stockExistPrefer(newEmptyCard.getId())){
+            notifyErrorMsg("此股票已在偏好裡");
+            return null;
+        }
+        //啟動任務上網查詢資料
+        Task<Map<String,String>> updateNewCardTask = new HasErrorHandelTask<Map<String, String>>(this::notifyErrorMsg) {
+            @Override
+            protected Map<String, String> call() throws Exception {
+                return psr.searchNetData(newEmptyCard.getId());
+            }
+
+            @Override
+            protected void succeeded() {
+                Map<String, String> result = getValue();
+                newEmptyCard.updateDateProperty(result.get("date"));
+                newEmptyCard.updatePriceProperty(result.get("close"),result.get("price_def"));
+                newEmptyCard.updateUpdateProperty(false);
+            }
+            
+        };
+        executor.execute(updateNewCardTask);
+        return updateNewCardTask;
+    }
+    
+    private boolean stockExistPrefer(String stockId){
+        return preferStockDataProperty.get().stream().anyMatch(e->stockId.equals(e.getId()));
+    }
+    
+    private StockBriefInfo createNewEmptyCard(String stockFullName){
+        String[] split = stockFullName.split(" ");
         StockBriefInfo newStock = new StockBriefInfo();
-        newStock.setId(stockId);
+        newStock.setId(split[0]);
+        newStock.setName(split[1]);
         newStock.setConcernedTime(1);
         preferStockDataProperty.add(newStock);
+        return newStock;
     }
 }

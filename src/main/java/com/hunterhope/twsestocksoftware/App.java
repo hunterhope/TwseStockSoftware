@@ -38,7 +38,7 @@ public class App extends Application {
         SceneBasicFormBorder root = null;
         switch (sceneType) {
             case PreferStockList:
-                root = new PreferStocksScene(ioc.createStockIdComponetVM(),ioc.getSearchComponetVM(),new PreferStocksSceneVM_impl());
+                root = new PreferStocksScene(ioc.createStockIdComponetVM(),ioc.getSearchComponetVM(),ioc.createPreferStocksScene());
                 break;
             case Test:
             default:

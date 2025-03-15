@@ -35,7 +35,7 @@ public class AddNewPreferStockDialog extends Dialog<String> {
         getDialogPane().setContent(hBox);
         setResultConverter(dialogButton -> {
             if(dialogButton == okBtn){
-                okbtnClick.action(sic.getInputStockId());
+                okbtnClick.action(sic.getInputStockFullName());
             }
             return null;
         });
