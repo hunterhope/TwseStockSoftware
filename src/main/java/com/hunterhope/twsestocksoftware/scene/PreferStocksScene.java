@@ -30,20 +30,24 @@ import javafx.scene.layout.TilePane;
 public class PreferStocksScene extends SceneBasicFormBorder {
 
     public interface PreferStocksSceneVM {
+
         ListProperty<StockBriefInfo> preferStocksDataProperty();
-        Task<Map<String,String>> addNewPreferStock(String stockId);
+
+        Task<Map<String, String>> addNewPreferStock(String stockId);
     }
 
     private final ListProperty<StockBriefInfo> preferData = new SimpleListProperty<>();
     private final PreferStocksSceneVM pssvm;
     private TilePane preferStocksPane;
-    
+
     public PreferStocksScene(StockIdComponetVM vm, SearchStockPriceComponetVM scvm, PreferStocksSceneVM pssvm) {
         super(vm, scvm);
         this.pssvm = pssvm;
         myLayout();
-        bindData();
+        //事件處裡(事件處理要在資料綁定後面,不然若事件處理是利用監聽器,會造成綁定到錯誤的屬性上.但這順序又會產生一個問題:bindData若一開始有資料,該資料不會觸發事件)
         handleEvent();
+        bindData();
+        
     }
 
     private void myLayout() {
@@ -57,42 +61,50 @@ public class PreferStocksScene extends SceneBasicFormBorder {
         //設定欄間距
         preferStocksPane.setHgap(12);
         preferStocksPane.setVgap(12);
-        preferStocksPane.getChildren().add(new StockBriefInfoCardComponet());
+        addPaneAddNewCardComponet();
         //放入中間顯示區域
         setCenter(preferStocksPane);
-        
+
     }
-    private void bindData(){
+
+    private void bindData() {
         preferData.bind(pssvm.preferStocksDataProperty());
     }
-    private void handleEvent(){
-        preferData.addListener(new ChangeListener<ObservableList<StockBriefInfo>>(){
+
+    private void handleEvent() {
+        preferData.addListener(new ChangeListener<ObservableList<StockBriefInfo>>() {
             @Override
             public void changed(ObservableValue<? extends ObservableList<StockBriefInfo>> ov, ObservableList<StockBriefInfo> oldv, ObservableList<StockBriefInfo> nv) {
                 preferStocksPane.getChildren().clear();
-                nv.forEach(e->{
+                nv.forEach(e -> {
                     StockBriefInfoCardComponet stockCard = new StockBriefInfoCardComponet(e);
                     stockCard.setOnMouseClicked(PreferStocksScene.this::changeToIndividualStockScene);
                     stockCard.setUserData(e.getId());
                     preferStocksPane.getChildren().add(stockCard);
                 });
-                StockBriefInfoCardComponet addNewCard = new StockBriefInfoCardComponet();
-                addNewCard.setOnMouseClicked(PreferStocksScene.this::addNewPreferStock);
-                preferStocksPane.getChildren().add(addNewCard);
+                addPaneAddNewCardComponet();
             }
         });
     }
-    private void changeToIndividualStockScene(MouseEvent mouseEvent){
+
+    private void addPaneAddNewCardComponet() {
+        StockBriefInfoCardComponet addNewCard = new StockBriefInfoCardComponet();
+        addNewCard.setOnMouseClicked(PreferStocksScene.this::addNewPreferStock);
+        preferStocksPane.getChildren().add(addNewCard);
+    }
+
+    private void changeToIndividualStockScene(MouseEvent mouseEvent) {
         Object eventSource = mouseEvent.getSource();
-        if(eventSource instanceof Node node){
-            String id=node.getUserData().toString();
-            System.out.println("click id="+id);
+        if (eventSource instanceof Node node) {
+            String id = node.getUserData().toString();
+            System.out.println("click id=" + id);
         }
     }
-    private void addNewPreferStock(MouseEvent mouseEvent){
+
+    private void addNewPreferStock(MouseEvent mouseEvent) {
         new AddNewPreferStockDialog((stockId) -> {
             pssvm.addNewPreferStock(stockId);
-        } ).showAndWait();
+        }).showAndWait();
     }
-    
+
 }

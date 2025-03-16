@@ -54,13 +54,13 @@ public class PreferStocksSceneVM_implTest extends InitJavaFxThread {
         PreferStockRepository psr = Mockito.mock(PreferStockRepository.class);
         PreferStocksSceneVM_impl vm = new PreferStocksSceneVM_impl(executorService, psr);
         //模擬依賴
-        Mockito.when(psr.searchNetData("2330")).thenReturn(Map.of("name", "台積電"));
+        Mockito.when(psr.searchNetData("2330 台積電")).thenReturn(Map.of("name", "台積電"));
         //跑起來
         Task<Map<String, String>> task = vm.addNewPreferStock("2330 台積電");
         Map<String, String> result = task.get();
         //驗證
-        Map<String,String> act = new HashMap<>();
-        act.put("name", "台積電");
-        Assertions.assertEquals(act,result);
+        Map<String,String> exp = new HashMap<>();
+        exp.put("name", "台積電");
+        Assertions.assertEquals(exp,result);
     }
 }

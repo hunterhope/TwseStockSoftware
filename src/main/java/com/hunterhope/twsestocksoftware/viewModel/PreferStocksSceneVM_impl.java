@@ -8,7 +8,6 @@ import com.hunterhope.twsestocksoftware.data.StockBriefInfo;
 import com.hunterhope.twsestocksoftware.other.HasErrorHandelTask;
 import com.hunterhope.twsestocksoftware.repository.PreferStockRepository;
 import com.hunterhope.twsestocksoftware.scene.PreferStocksScene.PreferStocksSceneVM;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import javafx.application.Platform;
@@ -40,7 +39,7 @@ public class PreferStocksSceneVM_impl extends HasErrorMsgVM implements PreferSto
                 Platform.runLater(() -> {
                     preferStockDataProperty.forEach(e->e.updateDateProperty("114/03/14"));
                     preferStockDataProperty.forEach(e->e.updatePriceProperty("16.7","+1"));
-                    preferStockDataProperty.forEach(e->e.updateUpdateProperty(false));
+                    preferStockDataProperty.forEach(e->e.updateProperty().set(false));
                 });
             } catch (InterruptedException ex) {
             }
@@ -67,22 +66,22 @@ public class PreferStocksSceneVM_impl extends HasErrorMsgVM implements PreferSto
             notifyErrorMsg("此股票已在偏好裡");
             return null;
         }
+        preferStockDataProperty.add(newEmptyCard);
         //啟動任務上網查詢資料
         Task<Map<String,String>> updateNewCardTask = new HasErrorHandelTask<Map<String, String>>(this::notifyErrorMsg) {
             @Override
             protected Map<String, String> call() throws Exception {
-                return psr.searchNetData(newEmptyCard.getId());
+                return psr.searchNetData(stockFullName);
             }
 
             @Override
             protected void succeeded() {
                 Map<String, String> result = getValue();
                 newEmptyCard.updateDateProperty(result.get("date"));
-                newEmptyCard.updatePriceProperty(result.get("close"),result.get("price_def"));
-                newEmptyCard.updateUpdateProperty(false);
+                newEmptyCard.updatePriceProperty(result.get("close"),result.get("priceDif"));
             }
-            
         };
+        newEmptyCard.updateProperty().bind(updateNewCardTask.runningProperty());
         executor.execute(updateNewCardTask);
         return updateNewCardTask;
     }
@@ -97,7 +96,6 @@ public class PreferStocksSceneVM_impl extends HasErrorMsgVM implements PreferSto
         newStock.setId(split[0]);
         newStock.setName(split[1]);
         newStock.setConcernedTime(1);
-        preferStockDataProperty.add(newStock);
         return newStock;
     }
 }

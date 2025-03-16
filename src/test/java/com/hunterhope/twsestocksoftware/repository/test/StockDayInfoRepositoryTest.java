@@ -11,8 +11,9 @@ import com.hunterhope.twsedbsave.service.exception.TwseDbQueryException;
 import com.hunterhope.twsestocksoftware.data.StockDayInfo;
 import com.hunterhope.twsestocksoftware.exception.StockIdNetNoDataException;
 import com.hunterhope.twsestocksoftware.repository.StockDayInfoRepository;
-import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import org.junit.jupiter.api.Assertions;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -101,4 +102,5 @@ public class StockDayInfoRepositoryTest {
         //驗證
         Mockito.verify(mockUpdateMsgAction, Mockito.atLeast(1)).accept(Mockito.any());
     }
+    
 }

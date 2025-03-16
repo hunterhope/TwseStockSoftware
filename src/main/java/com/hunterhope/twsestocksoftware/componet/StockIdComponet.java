@@ -7,7 +7,6 @@ package com.hunterhope.twsestocksoftware.componet;
 import com.hunterhope.twsestocksoftware.viewModel.StockIdComponetVM_impl;
 import java.util.List;
 import java.util.concurrent.Executor;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -62,8 +61,8 @@ public class StockIdComponet extends HBox {
         //資料綁定
         bindData();
         //事件處裡(事件處理要在資料綁定後面,不然若事件處理是利用監聽器,會造成綁定到錯誤的屬性上)
+        //但這順序又會產生一個問題:bindData若一開始有資料,該資料不會觸發事件
         hendleEvent();
-        
     }
     private void myLayout() {
         //建立控制項

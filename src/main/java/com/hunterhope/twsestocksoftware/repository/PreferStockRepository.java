@@ -4,6 +4,7 @@
  */
 package com.hunterhope.twsestocksoftware.repository;
 
+import com.hunterhope.twsestocksoftware.exception.StockIdNetNoDataException;
 import java.util.Map;
 
 /**
@@ -12,10 +13,18 @@ import java.util.Map;
  */
 public class PreferStockRepository {
 
+    private final StockDayInfoRepository sdir;
     
-    public Map<String, String> searchNetData(String stockId) {
-        
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public PreferStockRepository(StockDayInfoRepository sdir) {
+        this.sdir = sdir;
+    }
+    public Map<String, String> searchNetData(String stockFullName) throws StockIdNetNoDataException {
+        String[] split = stockFullName.split(" ");
+        Map<String, String> result=sdir.queryLatestDayInfo(split[0]);
+        //存入偏好資料庫
+        return Map.of("date", result.get("date"),
+                "close", result.get("close"),
+                "priceDif", result.get("priceDif"));
     }
 
     

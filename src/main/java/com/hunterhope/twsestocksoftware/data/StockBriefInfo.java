@@ -139,10 +139,9 @@ public class StockBriefInfo {
         dateProperty.set(date);
     }
 
-    public void updateUpdateProperty(boolean update) {
-        updateProperty.set(update);
+    public BooleanProperty updateProperty(){
+        return updateProperty;
     }
-
     public ProgressBar updateProgressBar() {
         ProgressBar pb = new ProgressBar();
         pb.visibleProperty().bind(updateProperty);
