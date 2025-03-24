@@ -4,19 +4,16 @@ import static com.hunterhope.twsestocksoftware.SceneType.Test;
 import com.hunterhope.twsestocksoftware.ioc.IocContainer;
 import com.hunterhope.twsestocksoftware.scene.PreferStocksScene;
 import com.hunterhope.twsestocksoftware.scene.SceneBasicFormBorder;
-import com.hunterhope.twsestocksoftware.viewModel.PreferStocksSceneVM_impl;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import javafx.application.Application;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * JavaFX App
  */
+@SpringBootApplication
 public class App extends Application {
 
     private static Stage mainStage;
@@ -62,6 +59,7 @@ public class App extends Application {
         return ioc;
     }
     public static void main(String[] args) {
+        SpringApplication.run(App.class, args);
         launch();
     }
     
